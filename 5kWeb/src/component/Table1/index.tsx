@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './style.css';
 import Row from './component/Row';
 import { Context } from './context';
@@ -37,7 +37,7 @@ const Table1: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        if (scrollTab_element.current && table_element.current) {
+        if (scrollTab_element.current && table_element.current && scroll_control.current.isScroll === false) {
             const scroll_element = scrollTab_element.current.children[0] as HTMLElement;
             const width_scrollTab = width_scrollTab_config;
             const width_row_hidden = myTable.widthFull - width_scrollTab;
@@ -55,7 +55,7 @@ const Table1: React.FC = () => {
         }
     }, [myTable]);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         function handleMouseUp_doc() {
             scroll_control.current = {
                 ...scroll_control.current,
@@ -78,28 +78,23 @@ const Table1: React.FC = () => {
                         setMyTable((pre) => {
                             return {
                                 ...pre,
-                                // offset_x_row: 0,
                                 pos_x: pre.width_index,
                             };
                         });
-
                         scroll_control.current = {
                             ...scroll_control.current,
-                            clientX: 0,
                             scroll_pos: 0,
                         };
                     } else if (new_scroll_pos >= max_pos) {
                         setMyTable((pre) => {
                             return {
                                 ...pre,
-                                // offset_x_row: offset_x_row,
                                 pos_x: myTable.width_index - (myTable.widthFull - myTable.width),
                             };
                         });
 
                         scroll_control.current = {
                             ...scroll_control.current,
-                            clientX: myTable.width,
                             scroll_pos: max_pos,
                         };
                     } else {
