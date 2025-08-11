@@ -1,16 +1,12 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Signup from '@src/screen/Signup';
+import Signin from '@src/screen/Signin';
 import Home from '@src/screen/Home';
 import NotFoundPage from '@src/screen/NotFoundPage';
-import Profile from '@src/screen/Profile';
-import Patient_Record from '@src/screen/Patient_Record';
 
 const router = createBrowserRouter(
     [
-        { path: '/signup', element: <Signup /> },
+        { path: '/signin', element: <Signin /> },
         { path: '/', element: <Home /> },
-        { path: '/profile', element: <Profile /> },
-        { path: '/patient_record', element: <Patient_Record /> },
         { path: '*', element: <NotFoundPage /> }, // Trang 404
     ],
     {
