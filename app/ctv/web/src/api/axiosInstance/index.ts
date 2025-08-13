@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const apiUrl = process.env.API_URL || 'http://localhost:3002';
+const apiUrl = process.env.API_URL || 'http://192.168.5.100:3002';
 
 const axiosInstance = axios.create({
     baseURL: apiUrl,
@@ -8,6 +8,7 @@ const axiosInstance = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
+    withCredentials: true
 });
 
 export default axiosInstance;

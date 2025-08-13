@@ -24,6 +24,9 @@ import postcss from 'rollup-plugin-postcss';
 import postcssPresetEnv from 'postcss-preset-env';
 import autoprefixer from 'autoprefixer';
 import url from '@rollup/plugin-url';
+// import nodePolyfills from 'rollup-plugin-node-polyfills';
+// import polyfillNode from 'rollup-plugin-polyfill-node';
+
 
 const getLocalIp = () => {
     const interfaces = os.networkInterfaces();
@@ -40,7 +43,10 @@ const getLocalIp = () => {
 const PORT = 3000;
 const HOST = getLocalIp();
 
-const entries = [{ find: '@src', replacement: 'src' }];
+
+const entries = [
+    { find: '@src', replacement: 'src' }
+];
 const customResolver = resolve({
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.css', '.pcss', '.scss', '.png'],
 });
@@ -61,27 +67,36 @@ const rollup_dev = isDev && [
             },
         ],
         plugins: [
+            // polyfillNode(),
+            resolve({
+                browser: true, // Quan trọng: để build cho browser
+                preferBuiltins: false
+            }),
+            // nodePolyfills(),
             peerDepsExternal(),
             external(),
-            resolve(),
+            // resolve(),
             commonjs(),
             postcss({
                 plugins: [postcssPresetEnv(), autoprefixer()],
-                minimize: true, // Nén CSS
+                minimize: false, // Nén CSS
                 modules: true, // Hỗ trợ CSS Modules
                 extract: true, // Xuất CSS ra file riêng,
                 use: {
                     sass: true, // Kích hoạt hỗ trợ SCSS
                 },
+                sourceMap: true
             }),
             typescript({
                 tsconfig: './tsconfig.json',
                 // declarationDir: 'dist/types',
+                // sourcemap: true
             }),
             babel({
                 babelHelpers: 'bundled',
                 extensions: ['.js', '.jsx', '.ts', '.tsx', '.css', '.pcss', '.scss'],
                 exclude: ['node_modules/**', '**/*.test.tsx', '**/*.spec.ts'],
+                sourceMaps: true
             }),
             alias({
                 entries: entries,
@@ -100,8 +115,9 @@ const rollup_dev = isDev && [
             }),
             json(),
             replace({
-                'process.env.NODE_ENV': JSON.stringify('development'),
                 preventAssignment: true, // Cần thiết cho Rollup 3+
+                'process.env.NODE_ENV': JSON.stringify('development'),
+                'process.env.API_URL': JSON.stringify(process.env.API_URL)
             }),
             // html({
             //     fileName: 'index.html',
@@ -112,10 +128,15 @@ const rollup_dev = isDev && [
                 fileName: '[name]-[hash][extname]', // Định dạng tên file đầu ra
             }),
         ],
+        resolve: {
+            alias: {
+                stream: 'stream-browserify'
+            }
+        },
         // external: ['react', 'react-dom'], // chỉ dùng khi build thư viện
         treeshake: {
             pureExternalModules: true, // Xử lý các module ngoài có annotation __PURE__
-            annotations: true, // Bật tính năng nhận diện annotation
+            annotations: false, // Bật tính năng nhận diện annotation
         },
         external: ['jest'],
     },

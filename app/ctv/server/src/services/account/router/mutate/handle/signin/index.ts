@@ -18,6 +18,8 @@ if (process.env.NODE_ENV !== 'development') {
     secure_cookie = true;
 }
 
+const sameSite = process.env.NODE_ENV === 'development' ? 'lax' : 'none';
+
 const timeExpireat = 60*60*24*30*12; // 1 year
 
 class Handle_Signin {
@@ -37,25 +39,9 @@ class Handle_Signin {
             isSuccess: false
         };
 
-        let userName_isString: boolean = false;
-        let password_isString: boolean = false;
         let connection_pool_isExist: boolean = false;
 
-        if (typeof userName === 'string') {
-            userName_isString = true;
-        } else {
-            myResponse.message = 'Parameter "userName" is NOT string !';
-        }
-
-        if (typeof password === 'string') {
-            password_isString = true;
-        } else {
-            myResponse.message = 'Parameter "password" is NOT string !';
-        }
-
-        if (userName_isString && password_isString) {
-            this._mutateDB_signin.set_infor_input({userName: userName, password: password});
-        }
+        this._mutateDB_signin.set_infor_input({userName: userName, password: password});
 
         const connection_pool = this._mssql_server.get_connectionPool();
         if (connection_pool !== undefined) {
@@ -66,7 +52,7 @@ class Handle_Signin {
             myResponse.message = 'Connect BD(mssql) NOT successly !';
         }
 
-        if (userName_isString && password_isString && connection_pool_isExist) {
+        if (connection_pool_isExist) {
             try {
                 const result = await this._mutateDB_signin.run();
 
@@ -100,15 +86,18 @@ class Handle_Signin {
                     res.cookie('id', id, {
                         httpOnly: true,
                         secure: secure_cookie,
+                        sameSite: sameSite,
                         expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
                         // signed: true
                     }).cookie('accessToken', accessToken, {
                         httpOnly: true, 
                         secure: secure_cookie,
+                        sameSite: sameSite,
                         expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
-                    }).cookie('accessToken', refreshToken, {
+                    }).cookie('refreshToken', refreshToken, {
                         httpOnly: true, 
                         secure: secure_cookie,
+                        sameSite: sameSite,
                         expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
                     })
 
