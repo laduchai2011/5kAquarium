@@ -31,7 +31,11 @@
         height: 100%;
 
         > div {
-            width: 1200px;
+            width: 1280px;
+
+            @include responsive(lg) {
+                width: 100%;
+            }
         }
     }
 }

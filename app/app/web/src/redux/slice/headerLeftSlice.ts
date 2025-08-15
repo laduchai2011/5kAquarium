@@ -3,7 +3,7 @@ import { HeaderLeftState, HeaderSelections, HeaderSelected } from '@src/componen
 
 
 const initialState: HeaderLeftState = {
-    isShow: true,
+    isShow: false,
     headerSelected: HeaderSelections.HOME
 };
 
