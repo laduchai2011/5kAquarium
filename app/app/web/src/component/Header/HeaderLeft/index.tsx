@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import style from './style.module.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState, AppDispatch } from '@src/redux';
-import { RxArrowLeft } from "react-icons/rx";
+import { MdOutlineMenu } from "react-icons/md";
 import { set_isShow, set_headerSelected } from '@src/redux/slice/headerLeftSlice';
 import { HOME, EVENT, LIVE, MY_LIVE, PROFILE } from '@src/const/text';
 import { HeaderSelections, HeaderSelected } from '@src/component/Header/HeaderLeft/type';
@@ -60,16 +60,16 @@ const HeaderLeft = () => {
     }
 
     const handleClose = () => {
-        dispatch(set_isShow(false))
+        dispatch(set_isShow(!isShow))
     }
 
     return (
         <div className={style.parent} ref={parent_element}>
-            <div className={style.overbackground} onClick={() => handleOpen()} />
+            {/* <div className={style.overbackground} onClick={() => handleOpen()} /> */}
             <div className={style.content}>
                 <div>
                     <span>CTV-5K</span>
-                    <RxArrowLeft onClick={() => handleClose()} size={25} />
+                    <MdOutlineMenu onClick={() => handleClose()} size={25} />
                 </div>
                 <div className={`${return_headerSelected(HeaderSelections.HOME)}`} onClick={() => handleSelected(HeaderSelections.HOME)}>{ HOME }</div>
                 <div className={`${return_headerSelected(HeaderSelections.EVENT)}`} onClick={() => handleSelected(HeaderSelections.EVENT)}>{ EVENT }</div>
