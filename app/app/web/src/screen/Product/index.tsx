@@ -1,12 +1,15 @@
 import style from './style.module.scss';
 import { GrFormAdd, GrFormSubtract  } from "react-icons/gr";
-
+import HeaderLeft from '@src/component/Header/HeaderLeft';
+import HeaderTop from '@src/component/Header/HeaderTop';
+import { PRODUCT } from '@src/const/text';
 
 const Product = () => {
 
-
     return (
         <div className={style.parent}>
+            <div className={style.headerLeft}><HeaderLeft /></div>
+            <div className={style.headerTop}><HeaderTop header={PRODUCT} /></div>
             <div className={style.main}>
                 <div className={style.product}>
                     <div className={style.imageContainer}>

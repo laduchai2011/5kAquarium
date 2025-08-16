@@ -44,6 +44,10 @@ const HeaderLeft = () => {
                 navigate('/myOrder')
                 break; 
             } 
+            case HeaderSelections.PROFILE: { 
+                navigate('/profile')
+                break; 
+            } 
             default: { 
                 //statements; 
                 break; 

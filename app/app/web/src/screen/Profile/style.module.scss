@@ -1,0 +1,37 @@
+@use 'src/utility/style/mixin.scss' as *;
+
+.parent {
+    > .headerLeft {
+        width: max-content;
+        height: max-content;
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: 2;
+    }
+
+    > .headerTop {
+        width: max-content;
+        height: max-content;
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+
+    > .main {
+        width: 100%;
+        @include center-of-column;
+        background-color: #eee;
+        margin-top: 50px;
+
+        > .main1 {
+            width: 1280px;
+            box-sizing: border-box;
+            padding: 10px;
+
+            @include responsive(lg) {
+                width: 100%;
+            }
+        } 
+    }
+}

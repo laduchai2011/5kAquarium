@@ -4,6 +4,7 @@ import Home from '@src/screen/Home';
 import NotFoundPage from '@src/screen/NotFoundPage';
 import Product from '@src/screen/Product';
 import MyOrder from '@src/screen/MyOrder';
+import Profile from '@src/screen/Profile';
 
 const router = createBrowserRouter(
     [
@@ -11,6 +12,7 @@ const router = createBrowserRouter(
         { path: '/', element: <Home /> },
         { path: '/product', element: <Product /> },
         { path: '/myOrder', element: <MyOrder /> },
+        { path: '/profile', element: <Profile /> },
         { path: '*', element: <NotFoundPage /> }, // Trang 404
     ],
     {
