@@ -1,7 +1,6 @@
 @use 'src/utility/style/mixin.scss' as *;
 
 .parent {
-    // background-color: white;
     position: relative;
     height: 50px;
     width: 200px;
@@ -16,20 +15,6 @@
         left: 0;
         height: 100vh;
     }
-
-    // > .overbackground {
-    //     background-color: rgb(212, 212, 212);
-    //     position: absolute;
-    //     width: 20px;
-    //     height: 100%;
-    //     z-index: 2;
-    //     right: -20px;
-    //     transition: right 0.3s linear;
-
-    //     &.overbackground_show {
-    //         right: 0;
-    //     }
-    // }
 
     > .content {
         width: 100%;

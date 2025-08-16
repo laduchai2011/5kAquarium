@@ -1,7 +1,6 @@
 export const HOME = 'Trang chủ';
-export const EVENT = 'Sự kiện';
-export const LIVE = 'Trực tiếp';
-export const MY_LIVE = 'Trực tiếp của bạn';
+export const PRODUCT = 'Sản phẩm';
+export const MY_ORDER = 'Đơn hàng của bạn';
 export const PROFILE = 'Trang cá nhân';
 export const SIGNIN = 'Đăng nhập';
 // export const SEARCH = 'Tìm kiếm';

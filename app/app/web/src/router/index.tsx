@@ -3,12 +3,14 @@ import Signin from '@src/screen/Signin';
 import Home from '@src/screen/Home';
 import NotFoundPage from '@src/screen/NotFoundPage';
 import Product from '@src/screen/Product';
+import MyOrder from '@src/screen/MyOrder';
 
 const router = createBrowserRouter(
     [
         { path: '/signin', element: <Signin /> },
         { path: '/', element: <Home /> },
         { path: '/product', element: <Product /> },
+        { path: '/myOrder', element: <MyOrder /> },
         { path: '*', element: <NotFoundPage /> }, // Trang 404
     ],
     {

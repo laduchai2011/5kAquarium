@@ -1,0 +1,18 @@
+@use 'src/utility/style/mixin.scss' as *;
+
+.parent {
+    margin-top: 10px;
+
+    > div {
+        box-sizing: border-box;
+        padding: 5px;
+    }
+
+    > div:nth-child(2n) {
+        background-color: rgb(231, 231, 231);
+    }
+
+    > div:nth-child(2n + 1) {
+        background-color: rgb(255, 255, 255);
+    }
+}

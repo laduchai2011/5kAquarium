@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import type { RootState } from '@src/redux';
 import { useSelector } from 'react-redux';
 import HeaderLeft from '@src/component/Header/HeaderLeft';
-// import HeaderTop from '@src/component/Header/HeaderTop';
+import HeaderTop from '@src/component/Header/HeaderTop';
 // import { InitComponent } from '@src/App/handleCommon';
 import { HeaderSelected } from "@src/component/Header/HeaderLeft/type";
 import Fish from './component/Fish';
@@ -23,7 +23,7 @@ const Home = () => {
     return (
         <div className={style.parent}>
             <div className={style.headerLeft}><HeaderLeft /></div>
-            {/* <div className={style.headerTop}><HeaderTop /></div> */}
+            <div className={style.headerTop}><HeaderTop /></div>
             <div className={style.main}>
                 <div>
                     <div><Fish /></div>

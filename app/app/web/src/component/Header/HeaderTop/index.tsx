@@ -3,7 +3,7 @@ import style from './style.module.scss';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@src/redux';
 import { HeaderSelections } from '@src/component/Header/HeaderLeft/type';
-import { HOME, EVENT, LIVE, MY_LIVE, PROFILE } from '@src/const/text';
+import { HOME, PRODUCT, MY_ORDER, PROFILE } from '@src/const/text';
 
 
 
@@ -12,7 +12,7 @@ const HeaderTop = () => {
     const parent_element = useRef<HTMLDivElement | null>(null);
     const headerSelected: HeaderSelections = useSelector((state: RootState) => state.headerLeftSlice.headerSelected);    
 
-    const Headers = [HOME, EVENT, LIVE, MY_LIVE, PROFILE]
+    const Headers = [HOME, PRODUCT, MY_ORDER, PROFILE]
 
     return (
         <div className={style.parent} ref={parent_element}>

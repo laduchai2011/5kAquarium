@@ -5,9 +5,8 @@ export interface HeaderLeftState {
 
 export enum HeaderSelections {
     HOME,
-    EVENT,
-    LIVE,
-    MY_LIVE,
+    PRODUCT,
+    MY_ORDER,
     PROFILE
 }
 
