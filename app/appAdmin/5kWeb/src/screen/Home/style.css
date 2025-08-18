@@ -2,3 +2,13 @@
     background-color: #eee;
     width: 100%;
 }
+
+.Home-main {
+    display: flex;
+    justify-content: center;
+}
+
+.Home-main1 {
+    width: 1280px;
+    background-color: white;
+}

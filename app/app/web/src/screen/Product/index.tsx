@@ -8,7 +8,7 @@ const Product = () => {
 
     return (
         <div className={style.parent}>
-            <div className={style.headerLeft}><HeaderLeft /></div>
+            <div className={style.headerLeft}><HeaderLeft header={PRODUCT} /></div>
             <div className={style.headerTop}><HeaderTop header={PRODUCT} /></div>
             <div className={style.main}>
                 <div className={style.product}>

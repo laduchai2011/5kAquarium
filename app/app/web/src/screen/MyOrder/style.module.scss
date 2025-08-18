@@ -2,13 +2,15 @@
 
 .parent {
     position: relative;
+    z-index: 10000;
+    
     > .headerLeft {
         width: max-content;
         height: max-content;
         position: fixed;
         left: 0;
         top: 0;
-        z-index: 2;
+        z-index: 2000;
     }
 
     > .headerTop {
@@ -16,7 +18,7 @@
         height: max-content;
         position: fixed;
         top: 0;
-        left: 0;
+        z-index: 1000;
     }
 
     > div:nth-child(3) {

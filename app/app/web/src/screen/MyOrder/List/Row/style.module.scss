@@ -1,7 +1,16 @@
 @use 'src/utility/style/mixin.scss' as *;
 
 .parent {
-    > div {
+    position: relative;
+    box-sizing: border-box;
+    padding: 5px;
+
+    > div:nth-child(1) {
+        top: 0;
+        left: 0;
+    }
+
+    > div:nth-child(2) {
         @include center-of-row;
 
         > div {
@@ -37,5 +46,15 @@
         > .money {
             width: 50px;
         }
+    }
+
+    > div:nth-child(3) {
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-size: 0.8rem;
+        background-color: rgb(255, 203, 203);
+        box-sizing: border-box;
+        padding: 2px;
     }
 }

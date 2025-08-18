@@ -4,6 +4,7 @@ import style from './style.module.scss';
 const Row = () => {
      return (
         <div className={style.parent}>
+            <div><input type='checkbox' /></div>
             <div>
                 <div className={style.index}>10</div>
                 <div className={style.image}>
@@ -13,6 +14,7 @@ const Row = () => {
                 <div className={style.amount}>so luong</div>
                 <div className={style.money}>tien</div>
             </div>
+            <div>Đã mua</div>
         </div>
     )
 }

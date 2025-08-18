@@ -1,20 +1,20 @@
-import { useEffect, useRef } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import style from './style.module.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState, AppDispatch } from '@src/redux';
 import { MdOutlineMenu } from "react-icons/md";
 import { set_isShow, set_headerSelected } from '@src/redux/slice/headerLeftSlice';
-import { HOME, PRODUCT, MY_ORDER, PROFILE } from '@src/const/text';
+import { HOME, PRODUCT, LIST, MY_ORDER, PROFILE, ABOUT5K } from '@src/const/text';
 import { HeaderSelections, HeaderSelected } from '@src/component/Header/HeaderLeft/type';
 import { useNavigate } from 'react-router-dom';
 
 
-const HeaderLeft = () => {
+const HeaderLeft: FC<{header: string}> = ({header}) => {
     const navigate = useNavigate();
     const parent_element = useRef<HTMLDivElement | null>(null);
     const dispatch = useDispatch<AppDispatch>();
     const isShow: boolean = useSelector((state: RootState) => state.headerLeftSlice.isShow);
-    const headerSelected: HeaderSelections = useSelector((state: RootState) => state.headerLeftSlice.headerSelected);
+    // const headerSelected: HeaderSelections = useSelector((state: RootState) => state.headerLeftSlice.headerSelected);
 
     useEffect(() => {
         if (parent_element.current) {
@@ -40,12 +40,20 @@ const HeaderLeft = () => {
                 navigate('/product')
                 break; 
             } 
+            case HeaderSelections.LIST: { 
+                navigate('/list')
+                break; 
+            } 
             case HeaderSelections.MY_ORDER: { 
                 navigate('/myOrder')
                 break; 
             } 
             case HeaderSelections.PROFILE: { 
                 navigate('/profile')
+                break; 
+            } 
+            case HeaderSelections.ABOUT5K: { 
+                navigate('/about5k')
                 break; 
             } 
             default: { 
@@ -55,8 +63,8 @@ const HeaderLeft = () => {
         } 
     }
 
-    const return_headerSelected = (_headerSelected: HeaderSelected) => {
-        if (headerSelected === _headerSelected) {
+    const return_headerSelected = (_header: string) => {
+        if (header === _header) {
             return style.headerSelected
         } else {
             return '';
@@ -71,13 +79,15 @@ const HeaderLeft = () => {
         <div className={style.parent} ref={parent_element}>
             <div className={style.content}>
                 <div>
-                    <span>CTV-5K</span>
+                    <span>5K-AQUARIUM</span>
                     <MdOutlineMenu onClick={() => handleClose()} size={25} />
                 </div>
-                <div className={`${return_headerSelected(HeaderSelections.HOME)}`} onClick={() => handleSelected(HeaderSelections.HOME)}>{ HOME }</div>
-                <div className={`${return_headerSelected(HeaderSelections.PRODUCT)}`} onClick={() => handleSelected(HeaderSelections.PRODUCT)}>{ PRODUCT }</div>
-                <div className={`${return_headerSelected(HeaderSelections.MY_ORDER)}`} onClick={() => handleSelected(HeaderSelections.MY_ORDER)}>{ MY_ORDER }</div>
-                <div className={`${return_headerSelected(HeaderSelections.PROFILE)}`} onClick={() => handleSelected(HeaderSelections.PROFILE)}>{ PROFILE }</div>
+                <div className={`${return_headerSelected(HOME)}`} onClick={() => handleSelected(HeaderSelections.HOME)}>{ HOME }</div>
+                <div className={`${return_headerSelected(PRODUCT)}`} onClick={() => handleSelected(HeaderSelections.PRODUCT)}>{ PRODUCT }</div>
+                <div className={`${return_headerSelected(LIST)}`} onClick={() => handleSelected(HeaderSelections.LIST)}>{ LIST }</div>
+                <div className={`${return_headerSelected(MY_ORDER)}`} onClick={() => handleSelected(HeaderSelections.MY_ORDER)}>{ MY_ORDER }</div>
+                <div className={`${return_headerSelected(PROFILE)}`} onClick={() => handleSelected(HeaderSelections.PROFILE)}>{ PROFILE }</div>
+                <div className={`${return_headerSelected(ABOUT5K)}`} onClick={() => handleSelected(HeaderSelections.ABOUT5K)}>{ ABOUT5K }</div>
             </div>
         </div>
     );

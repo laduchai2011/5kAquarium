@@ -6,8 +6,10 @@ export interface HeaderLeftState {
 export enum HeaderSelections {
     HOME,
     PRODUCT,
+    LIST,
     MY_ORDER,
-    PROFILE
+    PROFILE,
+    ABOUT5K
 }
 
 export type HeaderSelected = HeaderSelections;

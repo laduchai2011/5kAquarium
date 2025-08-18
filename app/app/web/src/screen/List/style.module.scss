@@ -1,6 +1,7 @@
 @use 'src/utility/style/mixin.scss' as *;
 
 .parent {
+    background-color: antiquewhite;
     z-index: 10000;
     
     > .headerLeft {
@@ -17,7 +18,6 @@
         height: max-content;
         position: fixed;
         top: 0;
-        left: 0;
         z-index: 1000;
     }
 
@@ -31,6 +31,7 @@
             width: 1280px;
             box-sizing: border-box;
             padding: 10px;
+            background-color: white;
 
             @include responsive(lg) {
                 width: 100%;

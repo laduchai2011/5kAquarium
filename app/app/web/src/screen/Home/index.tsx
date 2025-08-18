@@ -8,7 +8,7 @@ import { HOME } from '@src/const/text';
 const Home = () => {
     return (
         <div className={style.parent}>
-            <div className={style.headerLeft}><HeaderLeft /></div>
+            <div className={style.headerLeft}><HeaderLeft header={HOME} /></div>
             <div className={style.headerTop}><HeaderTop header={HOME} /></div>
             <div className={style.main}>
                 <div>
