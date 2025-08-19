@@ -5,8 +5,8 @@ import { verifyRefreshToken } from '@src/token';
 
 
 const myResponse: MyResponse<number> = {
-        isSuccess: false
-    };
+    isSuccess: false
+};
 
 class Handle_IsSignin {
 
@@ -17,14 +17,14 @@ class Handle_IsSignin {
             const verify_refreshToken = verifyRefreshToken(refreshToken);
 
             if (verify_refreshToken && verify_refreshToken.id) {
-                myResponse.data = verify_refreshToken.id
-                myResponse.isSuccess = true
-                myResponse.isSignin = true
+                myResponse.data = verify_refreshToken.id;
+                myResponse.isSuccess = true;
+                myResponse.isSignin = true;
             } else {
-                myResponse.isSignin = false
+                myResponse.isSignin = false;
             }
         } else {
-            myResponse.isSignin = false
+            myResponse.isSignin = false;
         }
        
         res.json(myResponse)

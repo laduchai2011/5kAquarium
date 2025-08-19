@@ -6,22 +6,25 @@ import axiosInstance from '@src/api/axiosInstance';
 import { MyResponse } from '@src/dataStruct/response';
 import { AccountField } from '@src/dataStruct/account';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import type { RootState } from '@src/redux';
+// import { useSelector } from 'react-redux';
+// import type { RootState } from '@src/redux';
+import NormalLoading from '@src/component/NormalLoading';
 
 const Signin = () => {
     const navigate = useNavigate();
-    const isSignin: boolean = useSelector((state: RootState) => state.appSlice.isSignin);
+    // const isSignin: boolean = useSelector((state: RootState) => state.appSlice.isSignin);
     const [signinInfor, setSigninInfor] = useState<signin_infor_type>({
         userName: '',
         password: ''
     })
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        if (isSignin) {
+        const myId = sessionStorage.getItem("myId");
+        if (myId!==null) {
             navigate('/')
         }
-    }, [navigate, isSignin])
+    }, [navigate])
 
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>, type: string) => {
         const value = e.target.value
@@ -39,13 +42,13 @@ const Signin = () => {
 
     const fetchSignin = async () => {
         try {
+            setIsLoading(true);
             const payload = {...signinInfor};
             const response = await axiosInstance.post<MyResponse<AccountField>>(
                 `/api/service_account/mutate/signin`,
                 payload
             );
             const resData = response.data;
-            console.log(resData)
             if (resData.isSuccess) {
                 window.location.reload();
             } else {
@@ -53,7 +56,13 @@ const Signin = () => {
             }
         } catch (error) {
             console.error(error);
-        } 
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+    if (isLoading) {
+        return <NormalLoading />
     }
 
     return (

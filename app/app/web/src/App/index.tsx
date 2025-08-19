@@ -23,6 +23,7 @@ const App = () => {
                         `/api/service_account/query/isSignin`
                     );
                     const resData = response.data;
+                    console.log('resData', resData)
                     if (resData.isSuccess) {
                         unstable_batchedUpdates(() => {
                             if (resData.data) {
@@ -57,8 +58,7 @@ const App = () => {
             <AppRouter />
         </div>
     );
-    
-    return
+
 };
 
 export default App;

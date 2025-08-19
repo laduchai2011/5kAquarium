@@ -10,14 +10,14 @@ import service_account from '@src/services/account';
 import service_order from '@src/services/order';
 
 const app: Express = express();
-const port = process.env.PORT || 3002;
+const port = process.env.PORT || 3006;
 
 app.use(cookieParser());
 app.use(`/api`, express.json());
 app.use(`/api`, express.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'http://192.168.5.100:3000');
+    res.header('Access-Control-Allow-Origin', 'http://172.19.224.1:3000');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     res.header('Access-Control-Allow-Credentials', 'true');
