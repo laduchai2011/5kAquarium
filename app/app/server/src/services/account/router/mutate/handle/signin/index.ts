@@ -24,11 +24,8 @@ const timeExpireat = 60*60*24*30*12; // 1 year
 
 class Handle_Signin {
     private _mssql_server = mssql_server;
-    private _mutateDB_signin;
 
-    constructor() {
-        this._mutateDB_signin = new MutateDB_Signin();
-    }
+    constructor() {}
 
     main = async (req: Request<Record<string, never>, unknown, signin_infor_type>, res: Response) => {
         const signinInfor = req.body;
@@ -41,27 +38,30 @@ class Handle_Signin {
 
         let connection_pool_isExist: boolean = false;
 
-        this._mutateDB_signin.set_infor_input({userName: userName, password: password});
+        const mutateDB_signin = new MutateDB_Signin();
+
+        mutateDB_signin.set_infor_input({userName: userName, password: password});
 
         const connection_pool = this._mssql_server.get_connectionPool();
-        if (connection_pool !== undefined) {
+        if (connection_pool) {
             connection_pool_isExist = true;
-            this._mutateDB_signin.set_connection_pool(connection_pool);
+            mutateDB_signin.set_connection_pool(connection_pool);
             myResponse.message = 'Connect BD(mssql) successly, but NOT yet login !';
         } else {
             myResponse.message = 'Connect BD(mssql) NOT successly !';
+            return res.status(500).json(myResponse);
         }
 
         if (connection_pool_isExist) {
             try {
-                const result = await this._mutateDB_signin.run();
+                const result = await mutateDB_signin.run();
 
                 if (result?.recordset.length && result?.recordset.length > 0) {
                     const id = result.recordset[0].id;
 
                     if (id === null) {
                         myResponse.message = 'Đăng ký thất bại !';
-                        return res.json(myResponse)
+                        return res.status(500).json(myResponse);
                     }
 
                     const myJwtPayload: MyJwtPayload = {
@@ -109,18 +109,18 @@ class Handle_Signin {
 
                     myResponse.message = 'Login successly !';
                     myResponse.isSuccess = true;
-                    myResponse.data = result.recordset[0]
+                    myResponse.data = result.recordset[0];
+                    return res.json(myResponse);
                 } else {
                     myResponse.message = 'Login NOT successly, account or password is incorrect !';
+                    return res.status(500).json(myResponse);
                 }
             } catch (error) {
-                console.error(error)
                 myResponse.message = 'Login NOT successly 6 !';
-                myResponse.err = error
+                myResponse.err = error;
+                return res.status(500).json(myResponse);
             }
         }
-
-        res.json(myResponse);
     };
 }
 

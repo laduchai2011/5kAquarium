@@ -17,7 +17,7 @@ const Signup = () => {
     const navigate = useNavigate();
 
     const [account, setAccount] = useState<AccountField>({
-        id: null,
+        id: -1,
         userName: '',
         password: '',
         phone: '',

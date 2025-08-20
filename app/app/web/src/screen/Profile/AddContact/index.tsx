@@ -16,7 +16,8 @@ const AddContact = () => {
 
     const {
         isShow_AddContact,
-        set_isShow_AddContact
+        set_isShow_AddContact, 
+        setIsLoading
     } = profileContext;
 
     const [addContact] = useAddContactMutation();
@@ -72,13 +73,10 @@ const AddContact = () => {
     }
 
     const handleAddAddress = () => {
+        setIsLoading(true);
         addContact(contact)
-        .then(res => {
-            // const resData = res.data;
-            // if (resData) {
-            //     const isLoading = resData.isSuccess
-            // }
-        }).catch(err => console.error(err))
+        .catch(err => console.error(err))
+        .finally(() => setIsLoading(false))
     }
 
     if (isShow_AddContact) {

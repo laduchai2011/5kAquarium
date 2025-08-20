@@ -3,10 +3,23 @@ import style from './style.module.scss';
 import { GrClose } from "react-icons/gr";
 import { FaEdit } from "react-icons/fa";
 import { ContactField } from '@src/dataStruct/account';
+import { setCookie } from '@src/utility/cookie';
 
 
 
-const Row: FC<{contact: ContactField}> = ({contact}) => {
+const Row: FC<{
+    contact: ContactField, 
+    selectedContact: ContactField | undefined, 
+    setSelectedContact: React.Dispatch<React.SetStateAction<ContactField | undefined>>
+}> = ({contact, selectedContact, setSelectedContact}) => {
+
+    const selectState = selectedContact?.id === contact.id ? true : false;
+
+    const handleSelected = () => {
+        setSelectedContact(contact);
+        setCookie('selectedContact', JSON.stringify(contact), 365);
+    }
+
     return (
         <div className={style.parent}>
             <div className={style.infor}>
@@ -24,7 +37,7 @@ const Row: FC<{contact: ContactField}> = ({contact}) => {
                 </div>
             </div>
             <div>
-                <input type='checkbox' />
+                <input type='checkbox' title='Chọn' checked={selectState} onChange={() => handleSelected()} />
             </div>
             <div className={style.icons}>
                 <FaEdit title='Chỉnh sửa' size={20} color='greenyellow' />

@@ -6,6 +6,7 @@ import Avatar from './Avatar';
 import OverView from './OverView';
 import Contact from './Contact';
 import AddContact from './AddContact';
+import MainLoading from '@src/component/MainLoading';
 import { PROFILE } from '@src/const/text';
 import { ProfileContext } from './context';
 import { ProfileContextInterface } from './type';
@@ -13,11 +14,13 @@ import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
     const navigate = useNavigate();
-    const [isShow_AddContact, set_isShow_AddContact] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isShow_AddContact, set_isShow_AddContact] = useState<boolean>(false);
     
     const valueContext: ProfileContextInterface = {
         isShow_AddContact,
-        set_isShow_AddContact
+        set_isShow_AddContact,
+        setIsLoading
     }
 
     const myId = sessionStorage.getItem("myId");
@@ -26,6 +29,7 @@ const Profile = () => {
         return (
             <ProfileContext.Provider value={valueContext}>
                 <div className={style.parent}>
+                    {isLoading && <MainLoading />}
                     <AddContact />
                     <div className={style.headerLeft}><HeaderLeft header={PROFILE} /></div>
                     <div className={style.headerTop}><HeaderTop header={PROFILE} /></div>

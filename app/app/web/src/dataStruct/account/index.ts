@@ -1,5 +1,5 @@
 export interface AccountField {
-    id: number | null;
+    id: number;
     userName: string;
     password: string;
     phone: string;

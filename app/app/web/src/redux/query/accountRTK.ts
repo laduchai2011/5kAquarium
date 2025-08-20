@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { ACCOUNT_API } from '@src/const/api/account';
 import { MyResponse } from '@src/dataStruct/response';
-import { ContactField } from '@src/dataStruct/account';
+import { AccountField, ContactField } from '@src/dataStruct/account';
 
 export const accountRTK = createApi({
     reducerPath: 'accountRTK',
@@ -11,6 +11,17 @@ export const accountRTK = createApi({
     }),
     tagTypes: ['Account', 'Contact'],
     endpoints: (builder) => ({
+        getAccount: builder.query<AccountField, void>({
+            query: () => ACCOUNT_API.GET_ACCOUNT,
+            transformResponse: (response: MyResponse<AccountField>): AccountField => {
+                if (!response.data) throw new Error('No account data');
+                return response.data;
+            },
+            providesTags: (result) =>
+                result
+                ? [{ type: 'Account', id: result.id }]
+                : [{ type: 'Account', id: 'LIST' }],
+        }),
         getContacts: builder.query<ContactField[], void>({
             query: () => ACCOUNT_API.GET_CONTACTS,
             transformResponse: (response: MyResponse<ContactField[]>) => response.data ?? [],
@@ -25,7 +36,7 @@ export const accountRTK = createApi({
         }),
         addContact: builder.mutation<MyResponse<ContactField>, ContactField>({
             query: (body) => ({
-                url: ACCOUNT_API.SIGNUP,
+                url: ACCOUNT_API.ADD_CONTACT,
                 method: 'POST',
                 body,
             }),
@@ -51,6 +62,7 @@ export const accountRTK = createApi({
 });
 
 export const { 
+    useGetAccountQuery,
     useGetContactsQuery,
     useAddContactMutation 
 } = accountRTK;

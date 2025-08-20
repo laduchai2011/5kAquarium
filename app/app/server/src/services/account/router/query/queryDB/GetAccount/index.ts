@@ -1,9 +1,9 @@
 import sql from 'mssql';
 import { QueryDB } from '@src/services/account/interface';
 // import { login_infor_type } from '../../handle/contacts/type';
-import { ContactField } from '@src/dataStruct/account';
+import { AccountField } from '@src/dataStruct/account';
 
-class QueryDB_Contacts extends QueryDB {
+class QueryDB_Get_Account extends QueryDB {
     private _connectionPool: sql.ConnectionPool | undefined;
     private _userId: number | undefined;
 
@@ -19,13 +19,13 @@ class QueryDB_Contacts extends QueryDB {
         this._userId = userId
     }
 
-    async run(): Promise<sql.IProcedureResult<ContactField> | void> {
+    async run(): Promise<sql.IResult<AccountField> | void> {
         if (this._connectionPool !== undefined && this._userId !==undefined) {
             try {
                 const result = await this._connectionPool
                     .request()
                     .input("userId", sql.Int, this._userId)
-                    .execute<ContactField>('Signup'); 
+                    .query("SELECT * FROM dbo.GetAccount(@userId)")
                     
                 return result
             } catch (error) {
@@ -37,4 +37,4 @@ class QueryDB_Contacts extends QueryDB {
 
 
 
-export default QueryDB_Contacts;
+export default QueryDB_Get_Account;

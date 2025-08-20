@@ -27,6 +27,16 @@ FROM
     Login('laduchai', '123');
 
 
+CREATE FUNCTION GetAccount (@userId INT) RETURNS TABLE AS RETURN (
+    SELECT
+        *
+    FROM
+        dbo.account
+    WHERE
+        id = @userId     
+);
+GO
+
 CREATE FUNCTION GetContacts (@userId INT) RETURNS TABLE AS RETURN (
     SELECT
         *

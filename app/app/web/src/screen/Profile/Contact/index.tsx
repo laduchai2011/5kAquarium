@@ -1,9 +1,10 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, memo } from 'react';
 import style from './style.module.scss';
 import { ProfileContext } from '../context';
 import { useGetContactsQuery } from '@src/redux/query/accountRTK';
 import { ContactField } from '@src/dataStruct/account';
 import Row from './component/Row';
+import { getCookie } from '@src/utility/cookie';
 
 
 const Contact = () => {
@@ -14,14 +15,23 @@ const Contact = () => {
     }
 
     const {
-        set_isShow_AddContact
+        set_isShow_AddContact,
+        setIsLoading
     } = profileContext;
 
-    const [contacts, setContacts] = useState<ContactField[]>([])
+    const [contacts, setContacts] = useState<ContactField[]>([]);
+    const [selectedContact, setSelectedContact] = useState<ContactField | undefined>(undefined);
+
+    useEffect(() => {
+        const _selectedContact = getCookie('selectedContact');
+        if (_selectedContact) {
+            setSelectedContact(JSON.parse(_selectedContact))
+        }
+    }, [])
 
     const {
         data, 
-        isFetching, 
+        // isFetching, 
         isLoading,
         isError, 
         error
@@ -34,8 +44,12 @@ const Contact = () => {
     }, [isError, error])
 
     useEffect(() => {
+        setIsLoading(isLoading)
+    }, [setIsLoading, isLoading])
+
+    useEffect(() => {
         if (data) {
-            setContacts(data)
+            setContacts(data);
         }
     }, [data]) 
 
@@ -44,7 +58,7 @@ const Contact = () => {
     }
 
     const rowArray = contacts.map((item) => {
-        return  <Row key={item.id} contact={item} />
+        return  <Row key={item.id} contact={item} selectedContact={selectedContact} setSelectedContact={setSelectedContact} />
     });
 
     return (
@@ -62,4 +76,4 @@ const Contact = () => {
     )
 }
 
-export default Contact;
+export default memo(Contact);

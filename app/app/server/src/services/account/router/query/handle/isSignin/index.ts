@@ -1,4 +1,3 @@
-
 import { Request, Response } from 'express';
 import { MyResponse } from '@src/dataStruct/response';
 import { verifyRefreshToken } from '@src/token';
@@ -18,26 +17,27 @@ class Handle_IsSignin {
 
             if (verify_refreshToken === "invalid") {
                 myResponse.message = "Refresh-Token không hợp lệ, hãy đăng nhập lại !"
-                return res.json(myResponse);
+                return res.status(500).json(myResponse);
             }
 
             if (verify_refreshToken === "expired") {
                 myResponse.message = "Refresh-Token hết hạn, hãy đăng nhập lại !"
-                return res.json(myResponse);
+                return res.status(500).json(myResponse);
             }
 
             if (verify_refreshToken && verify_refreshToken.id) {
                 myResponse.data = verify_refreshToken.id;
                 myResponse.isSuccess = true;
                 myResponse.isSignin = true;
+                return res.json(myResponse);
             } else {
                 myResponse.isSignin = false;
+                return res.status(500).json(myResponse);
             }
         } else {
             myResponse.isSignin = false;
+            return res.status(500).json(myResponse);
         }
-       
-        res.json(myResponse)
     };
 }
 

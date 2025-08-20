@@ -2,16 +2,20 @@ import express, { Router } from 'express';
 import dotenv from 'dotenv';
 import authentication from '@src/auth';
 import Handle_IsSignin from './handle/isSignin';
-import Handle_Query_Contacts from './handle/contacts';
+import Handle_Get_Contacts from './handle/GetContacts';
+import Handle_Get_Account from './handle/GetAccount';
 
 dotenv.config();
 const router_query_account: Router = express.Router();
 
 const handle_isSignin = new Handle_IsSignin();
-const handle_query_contacts = new Handle_Query_Contacts();
+const handle_get_contacts = new Handle_Get_Contacts();
+const handle_get_account = new Handle_Get_Account();
 
 router_query_account.get('/isSignin', handle_isSignin.main);
 
-router_query_account.get('/contacts', authentication, handle_query_contacts.main);
+router_query_account.get('/account', authentication, handle_get_account.main);
+
+router_query_account.get('/contacts', authentication, handle_get_contacts.main);
 
 export default router_query_account;
