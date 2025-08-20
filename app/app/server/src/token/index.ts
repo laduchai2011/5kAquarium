@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import jwt, { Secret, SignOptions, JwtPayload } from 'jsonwebtoken';
+import jwt, { Secret, SignOptions, JwtPayload, TokenExpiredError, JsonWebTokenError } from 'jsonwebtoken';
 dotenv.config();
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || "ACCESS_TOKEN_SECRET";
@@ -8,10 +8,14 @@ const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || "REFRESH_TOKEN_
 // Ép kiểu để chắc chắn JWT_SECRET là Secret
 // const JWT_SECRET = (process.env.JWT_SECRET ?? 'your-secret-key') as Secret;
 
-export interface MyJwtPayload extends JwtPayload {
-    id: number | null;
+export interface MyJwtPayload {
+    id: number;
     role?: string;
 }
+
+type CleanPayload = Omit<MyJwtPayload & Partial<JwtPayload>, "exp" | "iat" | "nbf">;
+
+type TokenState = MyJwtPayload | "expired" | "invalid";
 
 // const signOptions: SignOptions = {
 //     expiresIn: '1000h',
@@ -24,14 +28,18 @@ export interface MyJwtPayload extends JwtPayload {
 //     return jwt.sign(payload as object, JWT_SECRET as Secret, cp_signOptions);
 // }
 export function generateAccessToken(payload: MyJwtPayload, signOptions: SignOptions): string {
-    const cp_signOptions = {...signOptions} 
-    cp_signOptions.algorithm = 'HS256'
-    return jwt.sign(payload as object, ACCESS_TOKEN_SECRET as Secret, cp_signOptions);
+    const cp_signOptions = {...signOptions};
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { exp, iat, nbf, ...cleanPayload }: CleanPayload = payload as CleanPayload;
+    cp_signOptions.algorithm = 'HS256';
+    return jwt.sign(cleanPayload as object, ACCESS_TOKEN_SECRET as Secret, cp_signOptions);
 }
 export function generateRefreshToken(payload: MyJwtPayload, signOptions: SignOptions): string {
-    const cp_signOptions = {...signOptions} 
-    cp_signOptions.algorithm = 'HS256'
-    return jwt.sign(payload as object, REFRESH_TOKEN_SECRET as Secret, cp_signOptions);
+    const cp_signOptions = {...signOptions};
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { exp, iat, nbf, ...cleanPayload }: CleanPayload = payload as CleanPayload;
+    cp_signOptions.algorithm = 'HS256';
+    return jwt.sign(cleanPayload as object, REFRESH_TOKEN_SECRET as Secret, cp_signOptions);
 }
 
 // Xác minh token
@@ -43,21 +51,31 @@ export function generateRefreshToken(payload: MyJwtPayload, signOptions: SignOpt
 //         return null;
 //     }
 // }
-export function verifyAccessToken(token: string): MyJwtPayload | null {
+export function verifyAccessToken(token: string): TokenState {
     try {
-        return jwt.verify(token, ACCESS_TOKEN_SECRET) as MyJwtPayload;
+        return jwt.verify(token, ACCESS_TOKEN_SECRET as Secret) as MyJwtPayload;
     } catch (error) {
-        console.error('Token verification failed:', error);
-        return null;
+        if (error instanceof TokenExpiredError) {
+            return "expired";
+        }
+        if (error instanceof JsonWebTokenError) {
+            return "invalid";
+        }
+        return "invalid";
     }
 }
 
-export function verifyRefreshToken(token: string): MyJwtPayload | null {
+export function verifyRefreshToken(token: string): TokenState {
     try {
-        return jwt.verify(token, REFRESH_TOKEN_SECRET) as MyJwtPayload;
+        return jwt.verify(token, REFRESH_TOKEN_SECRET as Secret) as MyJwtPayload;
     } catch (error) {
-        console.error('Token verification failed:', error);
-        return null;
+        if (error instanceof TokenExpiredError) {
+            return "expired";
+        }
+        if (error instanceof JsonWebTokenError) {
+            return "invalid";
+        }
+        return "invalid";
     }
 }
 

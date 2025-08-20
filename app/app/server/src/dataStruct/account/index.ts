@@ -9,3 +9,14 @@ export interface AccountField {
     status: string;
     updateTime: string;
 }
+
+export interface ContactField {
+    id: number;
+    name: string;
+    phone: string;
+    address: string;
+    status: string;
+    userId: number;
+    updateTime: string;
+    createTime: string;
+}

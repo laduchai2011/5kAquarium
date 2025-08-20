@@ -38,3 +38,17 @@
         } 
     }
 }
+
+.parent1 {
+    height: 100vh;
+    width: 100vw;
+    @include center-of-rectangle;
+
+    > div {
+        @include center-of-row;
+
+        > div {
+            margin: 0 10px;
+        }
+    }
+}

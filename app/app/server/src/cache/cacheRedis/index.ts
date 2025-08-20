@@ -9,10 +9,10 @@ class ServiceRedis {
         this._clientRedis.on('error', err => console.error(`(ServiceRedis-constructor), err: ${err}`));
         // this._clientRedis.connect();
         if (!this._clientRedis.isOpen) {
-        this._clientRedis.connect().catch(err => {
-            console.error('(ServiceRedis-connect) Error:', err);
-        });
-    }
+            this._clientRedis.connect().catch(err => {
+                console.error('(ServiceRedis-connect) Error:', err);
+            });
+        }
     }
 
     async setData<T>(key: string, jsonValue: T, timeExpireat: number) {

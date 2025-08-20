@@ -1,61 +1,62 @@
+import { useContext, useState, useEffect } from 'react';
 import style from './style.module.scss';
-import { GrClose } from "react-icons/gr";
-import { FaEdit } from "react-icons/fa";
+import { ProfileContext } from '../context';
+import { useGetContactsQuery } from '@src/redux/query/accountRTK';
+import { ContactField } from '@src/dataStruct/account';
+import Row from './component/Row';
 
 
 const Contact = () => {
+    const profileContext = useContext(ProfileContext);
+    
+    if (!profileContext) {
+        throw new Error("profileContext in AddContact component cant undefined !");
+    }
+
+    const {
+        set_isShow_AddContact
+    } = profileContext;
+
+    const [contacts, setContacts] = useState<ContactField[]>([])
+
+    const {
+        data, 
+        isFetching, 
+        isLoading,
+        isError, 
+        error
+    } = useGetContactsQuery();
+
+    useEffect(() => {
+        if (isError && error) {
+            console.error(error);
+        }
+    }, [isError, error])
+
+    useEffect(() => {
+        if (data) {
+            setContacts(data)
+        }
+    }, [data]) 
+
+    const openDialogAddContact = () => {
+        set_isShow_AddContact(true)
+    }
+
+    const rowArray = contacts.map((item) => {
+        return  <Row key={item.id} contact={item} />
+    });
+
     return (
         <div className={style.parent}>
             <div className={style.header}>
                 Liên hệ
             </div>
             <div className={style.inforContainer}>
-                <div className={style.inforRow}>
-                    <div className={style.infor}>
-                        <div>
-                            <div>Tên</div>
-                            <div>name</div>
-                        </div>
-                        <div>
-                            <div>Số điện thoại</div>
-                            <div>name</div>
-                        </div>
-                        <div>
-                            <div>Địa chỉ</div>
-                            <div>name</div>
-                        </div>
-                    </div>
-                    <div>
-                        <input type='checkbox' />
-                    </div>
-                    <div className={style.icon}>
-                        <FaEdit title='Chỉnh sửa' size={20} color='greenyellow' />
-                        <GrClose title='Xóa' size={20} />
-                    </div>
-                </div>
-                <div className={style.inforRow}>
-                    <div className={style.infor}>
-                        <div>
-                            <div>Tên</div>
-                            <div>name</div>
-                        </div>
-                        <div>
-                            <div>Số điện thoại</div>
-                            <div>name</div>
-                        </div>
-                        <div>
-                            <div>Địa chỉ</div>
-                            <div>name name name name name name name name name name name</div>
-                        </div>
-                    </div>
-                    <div>
-                        <input type='checkbox' />
-                    </div>
-                    <div className={style.icon}>
-                        <FaEdit title='Chỉnh sửa' size={20} color='greenyellow' />
-                        <GrClose title='Xóa' size={20} />
-                    </div>
-                </div>
+                { rowArray }
+            </div>
+            <div className={style.addContainer}>
+                <div onClick={() => openDialogAddContact()}>Thêm liên hệ</div>
             </div>
         </div>
     )

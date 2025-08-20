@@ -16,6 +16,16 @@ class Handle_IsSignin {
         if (typeof refreshToken === 'string') {
             const verify_refreshToken = verifyRefreshToken(refreshToken);
 
+            if (verify_refreshToken === "invalid") {
+                myResponse.message = "Refresh-Token không hợp lệ, hãy đăng nhập lại !"
+                return res.json(myResponse);
+            }
+
+            if (verify_refreshToken === "expired") {
+                myResponse.message = "Refresh-Token hết hạn, hãy đăng nhập lại !"
+                return res.json(myResponse);
+            }
+
             if (verify_refreshToken && verify_refreshToken.id) {
                 myResponse.data = verify_refreshToken.id;
                 myResponse.isSuccess = true;

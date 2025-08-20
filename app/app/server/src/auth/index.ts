@@ -21,6 +21,8 @@ if (process.env.NODE_ENV !== 'development') {
     secure_cookie = true;
 }
 
+const sameSite = process.env.NODE_ENV === 'development' ? 'lax' : 'none';
+
 const timeExpireat = 60*60*24*30*12; // 1 year
 
 async function authentication(req: Request, res: Response, next: NextFunction) {
@@ -35,7 +37,22 @@ async function authentication(req: Request, res: Response, next: NextFunction) {
         isSuccess: false
     };
 
-    if (verify_accessToken) {
+    if (verify_accessToken === "invalid") {
+        myResponse.message = "Access-Token không hợp lệ, hãy đăng nhập lại !"
+        return res.json(myResponse);
+    }
+
+    if (verify_refreshToken === "invalid") {
+        myResponse.message = "Refresh-Token không hợp lệ, hãy đăng nhập lại !"
+        return res.json(myResponse);
+    }
+
+    if (verify_refreshToken === "expired") {
+        myResponse.message = "Refresh-Token hết hạn, hãy đăng nhập lại !"
+        return res.json(myResponse);
+    }
+
+    if (verify_accessToken && verify_accessToken !== "expired") {
         next();
     } else {
         const storeAuthToken = await serviceRedis.getData<StoreAuthToken>(keyServiceRedis)
@@ -62,11 +79,13 @@ async function authentication(req: Request, res: Response, next: NextFunction) {
                 res.cookie('id', id, {
                     httpOnly: true,
                     secure: secure_cookie,
+                    sameSite: sameSite,
                     expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
                     // signed: true
                 }).cookie('accessToken', new_accessToken, {
                     httpOnly: true, 
                     secure: secure_cookie,
+                    sameSite: sameSite,
                     expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
                 })
 

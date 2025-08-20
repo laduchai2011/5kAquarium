@@ -19,46 +19,27 @@
 
     > .inforContainer {
         margin-top: 10px;
-        > .inforRow {
-            @include center-of-row;
-            justify-content: space-between;
-            position: relative;
+    }
+
+    > .addContainer {
+        margin: 15px 0;
+        box-sizing: border-box;
+        padding: 10px;
+        @include center-of-row;
+        justify-content: flex-end;
+
+        > div {
+            background-color: red;
+            color: white;
             box-sizing: border-box;
             padding: 10px;
+            cursor: pointer;
+            user-select: none;
+            border-radius: 10px;
 
-            > .infor {
-                > div {
-                    @include center-of-row;
-
-                    > div {
-                        font-size: 1.2rem;
-                    }
-
-                    > div:nth-child(1) {
-                        width: 150px;
-                        font-weight: 600;
-                    }
-                }
+            &:hover {
+                box-shadow: 10px 5px 5px rgb(255, 0, 0, 0.5);
             }
-
-            > .icon {
-                position: absolute;
-                top: 5px;
-                right: 5px;
-
-                > svg {
-                    margin: 0 5px;
-                    cursor: pointer;
-                }
-            }
-        }
-
-        > .inforRow:nth-child(2n + 1) {
-            background-color: rgb(255, 239, 239);
-        }
-
-        > .inforRow:nth-child(2n) {
-            background-color: rgb(235, 236, 255);
         }
     }
 }

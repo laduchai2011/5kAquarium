@@ -57,7 +57,13 @@ class Handle_Signin {
                 const result = await this._mutateDB_signin.run();
 
                 if (result?.recordset.length && result?.recordset.length > 0) {
-                    const id = result.recordset[0].id
+                    const id = result.recordset[0].id;
+
+                    if (id === null) {
+                        myResponse.message = 'Đăng ký thất bại !';
+                        return res.json(myResponse)
+                    }
+
                     const myJwtPayload: MyJwtPayload = {
                         id: id
                     }

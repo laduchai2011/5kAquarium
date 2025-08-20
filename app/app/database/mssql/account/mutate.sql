@@ -15,3 +15,17 @@ END
 
 DELETE FROM account
 GO
+
+ALTER PROCEDURE AddContact
+	  @name NVARCHAR(100),
+	  @phone NVARCHAR(15),
+	  @address NVARCHAR(100),
+	  @userId INT
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	INSERT INTO contact (name, phone, address, status, userId)
+	OUTPUT INSERTED.*
+	VALUES (@name, @phone, @address, 'normal', @userId);
+END

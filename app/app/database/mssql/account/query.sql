@@ -25,3 +25,14 @@ SELECT
     *
 FROM
     Login('laduchai', '123');
+
+
+CREATE FUNCTION GetContacts (@userId INT) RETURNS TABLE AS RETURN (
+    SELECT
+        *
+    FROM
+        dbo.contact
+    WHERE
+        userId = @userId     
+);
+GO
