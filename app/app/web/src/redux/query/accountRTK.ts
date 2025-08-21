@@ -19,20 +19,34 @@ export const accountRTK = createApi({
             },
             providesTags: (result) =>
                 result
-                ? [{ type: 'Account', id: result.id }]
-                : [{ type: 'Account', id: 'LIST' }],
+                    ? [
+                        { type: 'Account', id: result.id },
+                        { type: 'Account', id: 'LIST' }, // thêm LIST
+                    ]
+                    : [{ type: 'Account', id: 'LIST' }],
         }),
         getContacts: builder.query<ContactField[], void>({
             query: () => ACCOUNT_API.GET_CONTACTS,
             transformResponse: (response: MyResponse<ContactField[]>) => response.data ?? [],
             providesTags: (result) =>
                 result
-                ? [
-                    ...result
-                    .map(({ id }) => ({ type: 'Contact' as const, id: id! })),
-                    { type: 'Contact', id: 'LIST' },
-                ]
-                : [{ type: 'Contact', id: 'LIST' }],
+                    ? [
+                        ...result
+                        .map(({ id }) => ({ type: 'Contact' as const, id: id! })),
+                        { type: 'Contact', id: 'LIST' },
+                    ]
+                    : [{ type: 'Contact', id: 'LIST' }],
+        }),
+        changeName: builder.mutation<MyResponse<AccountField>, AccountField>({
+            query: (body) => ({
+                url: ACCOUNT_API.CHANGE_NAME,
+                method: 'PATCH',
+                body,
+            }),
+            invalidatesTags: (result, error, arg) => 
+                result?.data
+                    ? [{ type: 'Account', id: result.data.id }]
+                    : [{ type: 'Account', id: 'LIST' }],
         }),
         addContact: builder.mutation<MyResponse<ContactField>, ContactField>({
             query: (body) => ({
@@ -64,5 +78,6 @@ export const accountRTK = createApi({
 export const { 
     useGetAccountQuery,
     useGetContactsQuery,
+    useChangeNameMutation,
     useAddContactMutation 
 } = accountRTK;

@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import Handle_Signup from './handle/signup';
 import Handle_Signin from './handle/signin';
 import Handle_AddContact from './handle/AddContact';
+import Handle_ChangeName from './handle/ChangeName/indexx';
 import authentication from '@src/auth';
 
 dotenv.config();
@@ -11,6 +12,7 @@ const router_mutate_account: Router = express.Router();
 const handle_signup = new Handle_Signup();
 const handle_signin = new Handle_Signin();
 const handle_addContact = new Handle_AddContact();
+const handle_changeName = new Handle_ChangeName();
 
 router_mutate_account.post('/', (_: Request, res: Response) => {
     res.send('(POST) Express + TypeScript Server: router_mutate_account');
@@ -27,6 +29,13 @@ router_mutate_account.post(
 router_mutate_account.post(
     '/signin',
     handle_signin.main
+);
+
+router_mutate_account.patch(
+    '/changeName',
+    authentication,
+    handle_changeName.setup,
+    handle_changeName.main
 );
 
 router_mutate_account.post(

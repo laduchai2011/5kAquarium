@@ -11,10 +11,39 @@ BEGIN
 	INSERT INTO account (userName, password, phone, firstName, lastName, avatar, status, createTime)
 	OUTPUT INSERTED.*
 	VALUES (@userName, @password, @phone, @firstName, @lastName, NULL, 'normal', SYSDATETIMEOFFSET());
-END
+END;
 
 DELETE FROM account
 GO
+
+CREATE PROCEDURE ChangeName
+	  @userId INT,
+	  @firstName NVARCHAR(100),
+	  @lastName NVARCHAR(100)
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	UPDATE account
+	SET firstName = @firstName, lastName = @lastName
+	WHERE id = @userId;
+
+	SELECT * FROM account WHERE id = @userId;
+END;
+
+CREATE PROCEDURE ChangeAvatar
+	  @userId INT,
+	  @avatar NVARCHAR(100)
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	UPDATE account
+	SET avatar = @avatar
+	WHERE id = @userId;
+
+	SELECT * FROM account WHERE id = @userId;
+END;
 
 ALTER PROCEDURE AddContact
 	  @name NVARCHAR(100),
@@ -28,4 +57,4 @@ BEGIN
 	INSERT INTO contact (name, phone, address, status, userId)
 	OUTPUT INSERTED.*
 	VALUES (@name, @phone, @address, 'normal', @userId);
-END
+END;

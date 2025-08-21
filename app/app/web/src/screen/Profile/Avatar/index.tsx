@@ -15,7 +15,8 @@ const Avatar = () => {
     }
 
     const {
-        setIsLoading
+        setIsLoading,
+        set_isShow_ChangeName
     } = profileContext;
 
     const [account, setAccount] = useState<AccountField | undefined>(undefined);
@@ -44,6 +45,10 @@ const Avatar = () => {
         }
     }, [data]) 
 
+    const showDialogChangeName = () => {
+        set_isShow_ChangeName(true);
+    }
+
     return (
         <div className={style.parent}>
             <div className={style.main}>
@@ -53,7 +58,7 @@ const Avatar = () => {
                 </div>
                 <div className={style.nameContainer}>
                     {account ? <div className={style.name}>{`${account?.firstName} ${account?.lastName}`}</div> : <div className={style.name}></div>}
-                    <div className={style.editName} title='Chỉnh sửa'><MdEdit size={30} color='greenyellow' /></div>
+                    <div className={style.editName} title='Chỉnh sửa'><MdEdit onClick={() => showDialogChangeName()} size={30} color='greenyellow' /></div>
                 </div>
             </div>
         </div>
