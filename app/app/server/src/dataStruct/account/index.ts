@@ -10,6 +10,21 @@ export interface AccountField {
     updateTime: string;
 }
 
+export interface StatisticField {
+    id: number;
+    myRank: number;
+    allOrder: number;
+    allMoney: number;
+    preMonthOrder: number;
+    thisMonthOrder: number;
+    preMonthMoney: number;
+    thisMonthMoney: number;
+    status: string;
+    userId: number;
+    updateTime: string;
+    createTime: string;
+}
+
 export interface ContactField {
     id: number;
     name: string;

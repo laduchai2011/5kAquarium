@@ -31,9 +31,9 @@ BEGIN
 	SELECT * FROM account WHERE id = @userId;
 END;
 
-CREATE PROCEDURE ChangeAvatar
+ALTER PROCEDURE ChangeAvatar
 	  @userId INT,
-	  @avatar NVARCHAR(100)
+	  @avatar NVARCHAR(255)
 AS
 BEGIN
 	SET NOCOUNT ON;

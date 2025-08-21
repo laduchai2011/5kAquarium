@@ -17,8 +17,11 @@ class Handle_UploadAImage {
             destination: (_req, _file, cb) => {
                 cb(null, imagePath);
             },
-            filename: (_req, file, cb) => {
-                cb(null, Date.now() + path.extname(file.originalname));
+            filename: (req, file, cb) => {
+                const userId = req.cookies?.id || 'unknown'; 
+                const timestamp = Date.now();
+                const ext = path.extname(file.originalname);
+                cb(null, `${userId}_${timestamp}${ext}`);
             },
         });
         const upload = multer({ storage });

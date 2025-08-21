@@ -37,6 +37,17 @@ export const accountRTK = createApi({
                     ]
                     : [{ type: 'Contact', id: 'LIST' }],
         }),
+        changeAvatar: builder.mutation<MyResponse<AccountField>, AccountField>({
+            query: (body) => ({
+                url: ACCOUNT_API.CHANGE_AVATAR,
+                method: 'PATCH',
+                body,
+            }),
+            invalidatesTags: (result, error, arg) => 
+                result?.data
+                    ? [{ type: 'Account', id: result.data.id }]
+                    : [{ type: 'Account', id: 'LIST' }],
+        }),
         changeName: builder.mutation<MyResponse<AccountField>, AccountField>({
             query: (body) => ({
                 url: ACCOUNT_API.CHANGE_NAME,
@@ -78,6 +89,7 @@ export const accountRTK = createApi({
 export const { 
     useGetAccountQuery,
     useGetContactsQuery,
+    useChangeAvatarMutation,
     useChangeNameMutation,
     useAddContactMutation 
 } = accountRTK;

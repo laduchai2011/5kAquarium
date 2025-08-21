@@ -8,7 +8,7 @@ import { AccountField } from '@src/dataStruct/account';
 import avatarnull from '../../../asset/avatar/avatarnull.png';
 
 const Avatar = () => {
-     const profileContext = useContext(ProfileContext);
+    const profileContext = useContext(ProfileContext);
         
     if (!profileContext) {
         throw new Error("profileContext in Avatar component cant undefined !");
@@ -16,6 +16,7 @@ const Avatar = () => {
 
     const {
         setIsLoading,
+        set_isShow_ChangeAvatar,
         set_isShow_ChangeName
     } = profileContext;
 
@@ -45,6 +46,10 @@ const Avatar = () => {
         }
     }, [data]) 
 
+    const showDialogChangeAvatar = () => {
+        set_isShow_ChangeAvatar(true);
+    }
+
     const showDialogChangeName = () => {
         set_isShow_ChangeName(true);
     }
@@ -53,8 +58,8 @@ const Avatar = () => {
         <div className={style.parent}>
             <div className={style.main}>
                 <div className={style.avatarContainer}>
-                    <img src={avatarnull} alt='' />
-                    <IoAddCircleOutline title='Chỉnh sửa' color='gray' size={30} />
+                    {account?.avatar ? <img src={account?.avatar} alt='' /> : <img src={avatarnull} alt='' />}
+                    <IoAddCircleOutline onClick={() => showDialogChangeAvatar()} title='Chỉnh sửa' color='gray' size={30} />
                 </div>
                 <div className={style.nameContainer}>
                     {account ? <div className={style.name}>{`${account?.firstName} ${account?.lastName}`}</div> : <div className={style.name}></div>}

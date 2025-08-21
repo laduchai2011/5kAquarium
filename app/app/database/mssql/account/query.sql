@@ -37,6 +37,16 @@ CREATE FUNCTION GetAccount (@userId INT) RETURNS TABLE AS RETURN (
 );
 GO
 
+ALTER FUNCTION GetStatistic (@userId INT) RETURNS TABLE AS RETURN (
+    SELECT
+        *
+    FROM
+        dbo.statistic
+    WHERE
+        userId = @userId     
+);
+GO
+
 CREATE FUNCTION GetContacts (@userId INT) RETURNS TABLE AS RETURN (
     SELECT
         *

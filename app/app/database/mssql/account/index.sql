@@ -19,13 +19,15 @@ GO
     CREATE NONCLUSTERED INDEX idx_phone ON account(phone);
 GO
 
-CREATE TABLE [statistics] (
+CREATE TABLE [statistic] (
     id INT PRIMARY KEY IDENTITY(1,1),
     myRank INT NOT NULL,
-    AllOrder INT NOT NULL,
-    AllMoney INT NOT NULL,
+    allOrder INT NOT NULL,
+    allMoney FLOAT(53) NOT NULL,
     preMonthOrder INT NOT NULL,
-    thisMonthOrder FLOAT(53) NOT NULL,
+    thisMonthOrder INT NOT NULL,
+	preMonthMoney FLOAT(53) NOT NULL,
+    thisMonthMoney FLOAT(53) NOT NULL,
     status NVARCHAR(255) NOT NULL,
     userId INT NOT NULL,
     updateTime DATETIMEOFFSET(7) NOT NULL DEFAULT SYSDATETIMEOFFSET(),
