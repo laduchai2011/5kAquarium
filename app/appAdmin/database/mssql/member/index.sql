@@ -1,4 +1,4 @@
-CREATE TABLE account (
+CREATE TABLE member5k (
     id INT PRIMARY KEY IDENTITY(1,1),
     userName NVARCHAR(100) NOT NULL UNIQUE,
     password NVARCHAR(100) NOT NULL,
@@ -8,13 +8,13 @@ CREATE TABLE account (
     avatar NVARCHAR(255),
     status NVARCHAR(255) NOT NULL,
     updateTime DATETIMEOFFSET(7) NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-    createTime DATETIMEOFFSET(7) NOT NULL
+    createTime DATETIMEOFFSET(7) NOT NULL DEFAULT SYSDATETIMEOFFSET()
 );
 
 GO
-    CREATE NONCLUSTERED INDEX idx_id ON account(id);
+    CREATE NONCLUSTERED INDEX idx_id ON member5k(id);
 GO
-    CREATE NONCLUSTERED INDEX idx_userName ON account(userName);
+    CREATE NONCLUSTERED INDEX idx_userName ON member5k(userName);
 GO
-    CREATE NONCLUSTERED INDEX idx_phone ON account(phone);
+    CREATE NONCLUSTERED INDEX idx_phone ON member5k(phone);
 GO

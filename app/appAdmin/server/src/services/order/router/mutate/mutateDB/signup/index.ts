@@ -1,7 +1,7 @@
 import sql from 'mssql';
 import { MutateDB } from '@src/services/order/interface';
 import { signup_infor_type } from '../../handle/signup/type';
-import { AccountField } from '@src/dataStruct/account';
+import { AccountField } from '@src/dataStruct/member';
 
 class MutateDB_Signup extends MutateDB {
     private _connectionPool: sql.ConnectionPool | undefined;

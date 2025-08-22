@@ -58,3 +58,15 @@ BEGIN
 	OUTPUT INSERTED.*
 	VALUES (@name, @phone, @address, 'normal', @userId);
 END;
+
+
+CREATE PROCEDURE CreateStatistic
+	  @userId INT
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	INSERT INTO statistic (myRank, allOrder, allMoney, preMonthOrder, thisMonthOrder, preMonthMoney, thisMonthMoney, status, userId)
+	OUTPUT INSERTED.*
+	VALUES (0, 0, 0, 0, 0, 0, 0, 'normal', @userId);
+END;

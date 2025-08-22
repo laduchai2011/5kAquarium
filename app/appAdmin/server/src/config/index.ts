@@ -6,7 +6,7 @@ dotenv.config();
 const mssql_config: my_interface['mssql']['config'] = {
     host: process.env.MSSQL_SERVER_HOST || '127.0.0.1',
     port: Number(process.env.MSSQL_SERVER_POST) || 1434,
-    database: process.env.MSSQL_SERVER_DATABASE || '5kAmin_dev',
+    database: process.env.MSSQL_SERVER_DATABASE || '5kApp_dev',
     username: process.env.MSSQL_SERVER_USERNAME || 'sa',
     password: process.env.MSSQL_SERVER_PASSWORD || '201195laducHai',
 };
@@ -14,7 +14,7 @@ const mssql_config: my_interface['mssql']['config'] = {
 const mssql_change_history_config: my_interface['mssql']['config'] = {
     host: process.env.MSSQL_CHANGE_HISTORY_SERVER_HOST || '127.0.0.1',
     port: Number(process.env.MSSQL_CHANGE_HISTORY_SERVER_POST) || 1434,
-    database: process.env.MSSQL_CHANGE_HISTORY_SERVER_DATABASE || '5kAmin_change_history_dev',
+    database: process.env.MSSQL_CHANGE_HISTORY_SERVER_DATABASE || '5kApp_change_history_dev',
     username: process.env.MSSQL_CHANGE_HISTORY_SERVER_USERNAME || 'sa',
     password: process.env.MSSQL_CHANGE_HISTORY_SERVER_PASSWORD || '201195laducHai',
 };

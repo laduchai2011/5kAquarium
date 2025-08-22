@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { ACCOUNT_API } from '@src/const/api/account';
 import { MyResponse } from '@src/dataStruct/response';
-import { AccountField, ContactField } from '@src/dataStruct/account';
+import { AccountField, ContactField, StatisticField } from '@src/dataStruct/account';
 
 export const accountRTK = createApi({
     reducerPath: 'accountRTK',
@@ -9,7 +9,7 @@ export const accountRTK = createApi({
         baseUrl: '', 
         credentials: 'include' 
     }),
-    tagTypes: ['Account', 'Contact'],
+    tagTypes: ['Account', 'Contact', 'Statistic'],
     endpoints: (builder) => ({
         getAccount: builder.query<AccountField, void>({
             query: () => ACCOUNT_API.GET_ACCOUNT,
@@ -37,13 +37,30 @@ export const accountRTK = createApi({
                     ]
                     : [{ type: 'Contact', id: 'LIST' }],
         }),
+        getStatistic: builder.query<MyResponse<StatisticField>, void>({
+            query: () => ACCOUNT_API.GET_STATISTIC,
+            // transformResponse: (response: MyResponse<StatisticField>): StatisticField => {
+            //     if (!response.data) throw new Error('No account data');
+            //     response.
+            //     return response.data;
+            // },
+            providesTags: (result) =>
+                result?.data
+                    ? [
+                        { type: 'Statistic', id: result.data.id },
+                        { type: 'Statistic', id: 'LIST' },
+                    ]
+                    : [{ type: 'Statistic', id: 'LIST' }],
+        }),
+
+        //////////////////////////////////////////////////////////////////////////
         changeAvatar: builder.mutation<MyResponse<AccountField>, AccountField>({
             query: (body) => ({
                 url: ACCOUNT_API.CHANGE_AVATAR,
                 method: 'PATCH',
                 body,
             }),
-            invalidatesTags: (result, error, arg) => 
+            invalidatesTags: (result) => 
                 result?.data
                     ? [{ type: 'Account', id: result.data.id }]
                     : [{ type: 'Account', id: 'LIST' }],
@@ -54,7 +71,7 @@ export const accountRTK = createApi({
                 method: 'PATCH',
                 body,
             }),
-            invalidatesTags: (result, error, arg) => 
+            invalidatesTags: (result) => 
                 result?.data
                     ? [{ type: 'Account', id: result.data.id }]
                     : [{ type: 'Account', id: 'LIST' }],
@@ -65,7 +82,7 @@ export const accountRTK = createApi({
                 method: 'POST',
                 body,
             }),
-            async onQueryStarted(newContact, { dispatch, queryFulfilled }) {
+            async onQueryStarted(_newContact, { dispatch, queryFulfilled }) {
                 try {
                     const { data } = await queryFulfilled;
                     if (data?.data) {
@@ -83,13 +100,25 @@ export const accountRTK = createApi({
                 }
             }
         }),
+        createStatistic: builder.mutation<MyResponse<StatisticField>, void>({
+            query: () => ({
+                url: ACCOUNT_API.CREATE_STATISTIC,
+                method: 'POST',
+            }),
+            invalidatesTags: (result) => 
+                result?.data
+                    ? [{ type: 'Statistic', id: result.data.id }]
+                    : [{ type: 'Statistic', id: 'LIST' }],
+        }),
     }),
 });
 
 export const { 
     useGetAccountQuery,
     useGetContactsQuery,
+    useGetStatisticQuery,
     useChangeAvatarMutation,
     useChangeNameMutation,
-    useAddContactMutation 
+    useAddContactMutation,
+    useCreateStatisticMutation 
 } = accountRTK;

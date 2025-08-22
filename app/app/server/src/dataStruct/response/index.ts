@@ -4,5 +4,5 @@ export interface MyResponse <T>{
     err?: Error | string | unknown,
     data?: T, 
     isSignin?: boolean,
-    isRow?: boolean
+    isEmptyData?: boolean
 }

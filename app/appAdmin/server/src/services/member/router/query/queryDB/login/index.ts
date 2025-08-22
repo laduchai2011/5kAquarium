@@ -1,7 +1,7 @@
 import sql from 'mssql';
-import { QueryDB } from '@src/services/account/interface';
+import { QueryDB } from '@src/services/member/interface';
 import { login_infor_type } from '../../handle/login/type';
-import { AccountField } from '@src/dataStruct/account';
+import { AccountField } from '@src/dataStruct/member';
 
 class QueryDB_Login extends QueryDB {
     private _connectionPool: sql.ConnectionPool | undefined;

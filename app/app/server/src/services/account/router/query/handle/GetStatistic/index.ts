@@ -66,12 +66,11 @@ class Handle_Get_Statistic {
             myResponse.data = result?.recordset[0];
             myResponse.message = 'Lấy dữ liệu thành công !';
             myResponse.isSuccess = true;
-            myResponse.isRow = true;
             return res.json(myResponse);
         } else {
             myResponse.message = 'Không có dữ liệu nào được tìm thấy !';
             myResponse.isSuccess = true;
-            myResponse.isRow = false;
+            myResponse.isEmptyData = true;
             return res.json(myResponse);
         }
     };

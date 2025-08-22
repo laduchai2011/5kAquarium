@@ -3,7 +3,7 @@ import sql from 'mssql';
 import { Request, Response, NextFunction } from 'express';
 import MutateDB_Signup from '../../mutateDB/signup';
 import my_interface from '@src/interface';
-import { AccountField } from '@src/dataStruct/account';
+import { AccountField } from '@src/dataStruct/member';
 
 class Handle_Signup {
     private _mssql_server = mssql_server;

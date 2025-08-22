@@ -5,6 +5,7 @@ import Handle_Signin from './handle/signin';
 import Handle_AddContact from './handle/AddContact';
 import Handle_ChangeAvatar from './handle/ChangeAvatar';
 import Handle_ChangeName from './handle/ChangeName';
+import Handle_CreateStatistic from './handle/CreateStatistic';
 import authentication from '@src/auth';
 
 dotenv.config();
@@ -15,6 +16,7 @@ const handle_signin = new Handle_Signin();
 const handle_addContact = new Handle_AddContact();
 const handle_changeName = new Handle_ChangeName();
 const handle_changeAvatar = new Handle_ChangeAvatar();
+const handle_createStatistic = new Handle_CreateStatistic();
 
 router_mutate_account.post('/', (_: Request, res: Response) => {
     res.send('(POST) Express + TypeScript Server: router_mutate_account');
@@ -52,6 +54,13 @@ router_mutate_account.post(
     authentication,
     handle_addContact.setup,
     handle_addContact.main
+);
+
+router_mutate_account.post(
+    '/createStatistic',
+    authentication,
+    handle_createStatistic.setup,
+    handle_createStatistic.main
 );
 
 export default router_mutate_account;

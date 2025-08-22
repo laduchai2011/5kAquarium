@@ -3,5 +3,6 @@ export interface MyResponse <T>{
     isSuccess?: boolean,
     err?: Error | string | unknown,
     data?: T, 
-    isSignin?: boolean
+    isSignin?: boolean,
+    isEmptyData?: boolean
 }

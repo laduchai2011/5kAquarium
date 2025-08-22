@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { set_id, set_isSignin, set_isLoading } from '@src/redux/slice/appSlice';
 import { unstable_batchedUpdates } from 'react-dom';
 import NormalLoading from '@src/component/NormalLoading';
+import { useGetStatisticQuery, useCreateStatisticMutation } from '@src/redux/query/accountRTK';
 
 
 const App = () => {
@@ -23,7 +24,6 @@ const App = () => {
                         `/api/service_account/query/isSignin`
                     );
                     const resData = response.data;
-                    console.log('resData', resData)
                     if (resData.isSuccess) {
                         unstable_batchedUpdates(() => {
                             if (resData.data) {
@@ -47,6 +47,40 @@ const App = () => {
         }
         
     }, [dispatch])
+
+    ///////////////////////////////////////////////
+    const [createStatistic] = useCreateStatisticMutation()
+    const {
+        data: data_Statistic, 
+        // isFetching, 
+        isLoading: isLoading_Statistic,
+        isError: isError_Statistic, 
+        error: error_Statistic
+    } = useGetStatisticQuery();
+
+    useEffect(() => {
+        if (isError_Statistic && error_Statistic) {
+            console.error(error_Statistic);
+        }
+    }, [isError_Statistic, error_Statistic])
+
+    useEffect(() => {
+        dispatch(set_isLoading(isLoading_Statistic));
+    }, [dispatch, isLoading_Statistic])
+
+    useEffect(() => {
+        const resData = data_Statistic
+        if (resData?.isSuccess) {
+            if (resData?.isEmptyData) {
+                createStatistic()
+                .catch(err => {
+                    console.error(err)
+                    alert('Tạo thống kê thất bại')
+                })
+            }
+        }
+    }, [data_Statistic, createStatistic]) 
+    /////////////////////////////////
    
 
     if (isLoading) {

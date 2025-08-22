@@ -1,5 +1,5 @@
-export interface AccountField {
-    id: number | null;
+export interface MemberField {
+    id: number;
     userName: string;
     password: string;
     phone: string;
@@ -8,4 +8,5 @@ export interface AccountField {
     avatar: string | null;
     status: string;
     updateTime: string;
+    createTime: string;
 }
