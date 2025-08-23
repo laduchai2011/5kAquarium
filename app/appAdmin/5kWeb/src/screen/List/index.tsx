@@ -2,7 +2,7 @@ import React from 'react';
 import './style.css';
 import Header from '../Header';
 import Table from './component/Table';
-import AddIntoList from './component/AddIntoList';
+import AddFishCode from './component/AddFishCode';
 
 
 const List: React.FC = () => {
@@ -19,7 +19,7 @@ const List: React.FC = () => {
                         <Table />
                     </div>
                     <div>
-                        <AddIntoList />
+                        <AddFishCode />
                     </div>
                 </div>
                 

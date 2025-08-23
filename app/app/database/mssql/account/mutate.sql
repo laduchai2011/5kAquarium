@@ -81,3 +81,6 @@ BEGIN
 	OUTPUT INSERTED.*
 	VALUES ('admin', 'normal', @userId);
 END;
+
+EXEC AddAdmin
+    @userId = 1
