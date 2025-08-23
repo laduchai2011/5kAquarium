@@ -1,18 +1,20 @@
 import React, { useEffect, useRef } from 'react';
 import './styles.css';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { HOME, Order } from '@src/const/text';
+import { HOME, Order, LIST } from '@src/const/text';
 import type { select_type } from '@src/screen/Header/type';
 import { select_options } from '@src/screen/Header/type';
 
 const dfIndex = {
     [select_options.HOME]: 0,
     [select_options.ORDER]: 1,
+    [select_options.LIST]: 2,
 };
 
 const dfRouter = {
     [select_options.HOME]: '/',
     [select_options.ORDER]: '/order',
+    [select_options.LIST]: '/list',
 };
 
 const Center: React.FC = () => {
@@ -29,6 +31,10 @@ const Center: React.FC = () => {
             }
             case dfRouter[select_options.ORDER]: {
                 index_selected = dfIndex[select_options.ORDER];
+                break;
+            }
+            case dfRouter[select_options.LIST]: {
+                index_selected = dfIndex[select_options.LIST];
                 break;
             }
             default: {
@@ -57,6 +63,7 @@ const Center: React.FC = () => {
         <div className="Header_Center" ref={parent_element}>
             <div onClick={() => handleSelected(select_options.HOME)}>{HOME}</div>
             <div onClick={() => handleSelected(select_options.ORDER)}>{Order}</div>
+            <div onClick={() => handleSelected(select_options.LIST)}>{LIST}</div>
         </div>
     );
 };

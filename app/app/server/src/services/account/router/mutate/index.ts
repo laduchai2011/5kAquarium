@@ -34,6 +34,10 @@ router_mutate_account.post(
     '/signin',
     handle_signin.main
 );
+router_mutate_account.post(
+    '/admin_signin',
+    handle_signin.main
+);
 
 router_mutate_account.patch(
     '/changeAvatar',

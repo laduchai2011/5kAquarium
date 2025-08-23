@@ -1,11 +1,25 @@
-import React from 'react';
+import { useEffect } from 'react';
 import './style.css';
 import Header from '../Header';
 import OverView from './component/OverView';
 import MyChart from './component/MyChart';
 import SalerRank from './component/SalerRank';
+import { useNavigate } from 'react-router-dom';
 
-const Home: React.FC = () => {
+const Home = () => {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        // const myId = sessionStorage.getItem("myId");
+        const appRole = sessionStorage.getItem("appRole");
+        // if (myId === null) {
+        //     navigate('/signin')
+        // }
+        if (appRole !== 'admin') {
+            navigate('/notadmin')
+        }
+    }, [navigate])
+
     return (
         <div className="Home">
             <div>

@@ -70,3 +70,14 @@ BEGIN
 	OUTPUT INSERTED.*
 	VALUES (0, 0, 0, 0, 0, 0, 0, 'normal', @userId);
 END;
+
+CREATE PROCEDURE AddAdmin
+	  @userId INT
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	INSERT INTO role (role, status, userId)
+	OUTPUT INSERTED.*
+	VALUES ('admin', 'normal', @userId);
+END;

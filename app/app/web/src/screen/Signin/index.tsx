@@ -6,13 +6,10 @@ import axiosInstance from '@src/api/axiosInstance';
 import { MyResponse } from '@src/dataStruct/response';
 import { AccountField } from '@src/dataStruct/account';
 import { useNavigate } from 'react-router-dom';
-// import { useSelector } from 'react-redux';
-// import type { RootState } from '@src/redux';
 import NormalLoading from '@src/component/NormalLoading';
 
 const Signin = () => {
     const navigate = useNavigate();
-    // const isSignin: boolean = useSelector((state: RootState) => state.appSlice.isSignin);
     const [signinInfor, setSigninInfor] = useState<signin_infor_type>({
         userName: '',
         password: ''

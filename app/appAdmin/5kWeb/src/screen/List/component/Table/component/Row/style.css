@@ -1,0 +1,51 @@
+.List-Table-Row {
+    width: 100%;
+}
+.List-Table-Row.active {
+    background-color: rgb(224, 224, 224);
+}
+
+.List-Row-row {
+    display: flex;
+    box-sizing: border-box;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.List-Row-row > div {
+    text-align: center;
+    box-sizing: border-box;
+    padding: 5px;
+    font-weight: 400;
+}
+
+.List-Row-row-index {
+    width: 50px;
+}
+
+.List-Row-row-name {
+    flex: 1;
+}
+
+.List-Row-row-size {
+    width: 100px;
+}
+
+.List-Row-row-remain {
+    width: 100px;
+}
+
+.List-Row-row-money {
+    width: 100px;
+}
+
+.List-Row-detail {
+    border-top: 1px solid gray;
+    box-sizing: border-box;
+    height: 0;
+    overflow: hidden;
+}
+
+.List-Row-detail.show {
+    height: max-content;
+}

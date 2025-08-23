@@ -56,3 +56,17 @@ CREATE FUNCTION GetContacts (@userId INT) RETURNS TABLE AS RETURN (
         userId = @userId     
 );
 GO
+
+CREATE FUNCTION GetRoleWithFK (@userId INT)
+RETURNS TABLE
+AS
+RETURN
+(
+     SELECT
+        *
+    FROM
+        dbo.role
+    WHERE
+        userId = @userId     
+);
+GO

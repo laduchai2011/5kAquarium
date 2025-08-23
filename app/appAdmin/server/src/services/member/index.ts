@@ -3,12 +3,12 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-import router_query_account from './router/query';
-import router_mutate_account from './router/mutate';
+import router_query_member from './router/query';
+import router_mutate_member from './router/mutate';
 
-const service_account: Express = express();
+const service_member: Express = express();
 
-service_account.use(`/query`, router_query_account);
-service_account.use(`/mutate`, router_mutate_account);
+service_member.use(`/query`, router_query_member);
+service_member.use(`/mutate`, router_mutate_member);
 
-export default service_account;
+export default service_member;

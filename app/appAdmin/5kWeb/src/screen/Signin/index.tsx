@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import './style.css';
 import axiosInstance from '@src/api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
+import type { MyResponse } from '@src/dataStruct/response';
+import type { AccountField } from '@src/dataStruct/account';
 
 interface SigninField {
     userName: string;
@@ -15,17 +17,34 @@ const Signin: React.FC = () => {
         password: '',
     });
 
-    async function fetchUser(): Promise<SigninField> {
-        const response = await axiosInstance.get<SigninField>(
-            `/api/service_account/query/signin?userName=${signin.userName}&password=${signin.password}`
-        );
-        console.log(111111111, response.data)
-        return response.data;
+    // useEffect(() => {
+    //     const myId = sessionStorage.getItem("myId");
+    //     if (myId!==null) {
+    //         navigate('/')
+    //     }
+    // }, [navigate])
+
+    async function fetchSignin() {
+        try {
+            const payload = {...signin};
+            const response = await axiosInstance.post<MyResponse<AccountField>>(
+                '/api/service_account/mutate/signin',
+                payload
+            );
+            const resData = response.data;
+            if (resData.isSuccess) {
+                window.location.reload();
+            } else {
+                console.error('Đăng nhập thất bại:', resData.message);
+            }
+        } catch (error) {
+              console.error(error);
+        }
     }
 
     const handleSignin = async () => {
         try {
-            await fetchUser();
+            await fetchSignin();
             navigate('/');
         } catch (error: unknown) {
             console.error(error);
@@ -50,7 +69,7 @@ const Signin: React.FC = () => {
                     />
                 </div>
                 <div>
-                    <div>password</div>
+                    <div>Mật khẩu</div>
                     <input
                         value={signin.password}
                         onChange={(e) =>
