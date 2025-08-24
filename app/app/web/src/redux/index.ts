@@ -9,7 +9,9 @@ export const store = configureStore({
         headerLeftSlice: headerLeftReducer,
         [accountRTK.reducerPath]: accountRTK.reducer,
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(accountRTK.middleware),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(
+        accountRTK.middleware
+    ),
 });
 
 // Type hỗ trợ

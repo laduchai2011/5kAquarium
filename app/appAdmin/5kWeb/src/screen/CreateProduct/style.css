@@ -1,0 +1,46 @@
+.CreateProduct {
+    display: flex;
+    justify-content: center;
+    background-color: #eee;
+}
+
+.CreateProduct-main {
+    background-color: white;
+    width: 1280px;
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+.CreateProduct-main > h2 {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.CreateProduct-inputContainer {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.CreateProduct-inputContainer > div {
+    width: 100px;
+} 
+
+.CreateProduct-imageIcon > input {
+    display: none;
+}
+
+.CreateProduct-imageContainer > img {
+    width: 50%;
+    object-fit: contain;
+}
+
+.CreateProduct-btnContainer {
+    margin: 20px 0;
+}
+
+.CreateProduct-btnContainer > button {
+    font-size: 1.2rem;
+    box-sizing: border-box;
+    padding: 10px;
+}

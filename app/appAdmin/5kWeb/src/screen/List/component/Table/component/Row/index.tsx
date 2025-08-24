@@ -1,16 +1,19 @@
 import React, { useRef, useState, useEffect } from 'react';
 import './style.css';
+import { useNavigate } from 'react-router-dom';
 import { 
     EditorState, 
     Editor,
     convertFromRaw 
 } from 'draft-js';
+import blockRendererFn from './component/blockRendererFn';
 import type { FishCodeField } from '@src/dataStruct/fishCode';
 
 
-const Row: React.FC<{ data: FishCodeField }> = ({ data }) => {
+const Row: React.FC<{ data: FishCodeField, index: number }> = ({ data, index }) => {
     const parent_element = useRef<HTMLDivElement | null>(null);
     const detail_element = useRef<HTMLDivElement | null>(null);
+    const navigate = useNavigate();
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
     useEffect(() => {
@@ -19,7 +22,7 @@ const Row: React.FC<{ data: FishCodeField }> = ({ data }) => {
             setEditorState(EditorState.createWithContent(contentState));
         };
         handleShowContent()
-    }, [editorState, data.detail])
+    }, [data.detail])
 
     const handleSelect = () => {
         if (parent_element.current && detail_element.current) {
@@ -28,19 +31,29 @@ const Row: React.FC<{ data: FishCodeField }> = ({ data }) => {
         }
     }
 
-    
+    const handleAddProduct = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        e.stopPropagation();
+        navigate('/createProduct');
+    }
 
     return (
         <div className="List-Table-Row" ref={parent_element} onClick={() => handleSelect()}>
             <div className='List-Row-row'>
-                <div className='List-Row-row-index'>1</div>
-                <div className='List-Row-row-name'>Tên</div>
-                <div className='List-Row-row-size'>Kích thước</div>
-                <div className='List-Row-row-remain'>Còn hàng</div>
-                <div className='List-Row-row-money'>Tiền</div>
+                <div className='List-Row-row-index'>{index}</div>
+                <div className='List-Row-row-name'>{data.name}</div>
+                <div className='List-Row-row-size'>{data.size}</div>
+                <div className='List-Row-row-remain'>{data.remain}</div>
+                <div className='List-Row-row-money'>{data.money}</div>
+                <div className='List-Row-row-btnContainer'>
+                    <div onClick={(e) => handleAddProduct(e)}>Tạo sản phẩm</div>
+                </div>
             </div>
             <div className='List-Row-detail' ref={detail_element}>
-                <Editor editorState={editorState} onChange={setEditorState} />
+                <Editor 
+                    editorState={editorState} 
+                    onChange={setEditorState}
+                    blockRendererFn={blockRendererFn} 
+                />
             </div>
         </div>
     );

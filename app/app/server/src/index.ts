@@ -11,6 +11,7 @@ import service_account from '@src/services/account';
 import service_order from '@src/services/order';
 import service_image from './services/image';
 import service_fishCode from './services/fishCode';
+import service_product from './services/product';
 
 const app: Express = express();
 const port = process.env.PORT || 3006;
@@ -57,6 +58,7 @@ app.use(`/api/service_account`, service_account);
 app.use(`/api/service_order`, service_order);
 app.use(`/api/service_image`, service_image);
 app.use(`/api/service_fishCode`, service_fishCode);
+app.use(`/api/service_product`, service_product);
 
 app.use('/watch1', express.static(path.join(process.cwd(), 'data', 'video', 'output', 'video.mp4')));
 

@@ -20,3 +20,10 @@
 .List-AddFishCode-textEditor > div:nth-child(1) {
     margin-bottom: 10px;
 }
+
+.List-AddFishCode-btn {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}

@@ -12,6 +12,6 @@ export interface FishCodeField {
 }
 
 export interface PagedFishCodeField {
-    data: FishCodeField[],
+    items: FishCodeField[],
     totalCount: number
 }
