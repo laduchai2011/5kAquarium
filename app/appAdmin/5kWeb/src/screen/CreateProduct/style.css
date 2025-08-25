@@ -16,6 +16,14 @@
     text-align: center;
 }
 
+.CreateProduct-main1 {
+    display: flex;
+}
+
+.CreateProduct-main1 > div {
+    width: 50%;
+}
+
 .CreateProduct-inputContainer {
     display: flex;
     align-items: center;
@@ -31,7 +39,7 @@
 }
 
 .CreateProduct-imageContainer > img {
-    width: 50%;
+    width: 100%;
     object-fit: contain;
 }
 
@@ -43,4 +51,18 @@
     font-size: 1.2rem;
     box-sizing: border-box;
     padding: 10px;
+}
+
+.CreateProduct-fishCode {
+    background-color: rgb(243, 243, 243);
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+.CreateProduct-fishCode > div:nth-child(1) {
+    text-align: center;
+}
+
+.CreateProduct-fishCode-infor {
+    
 }

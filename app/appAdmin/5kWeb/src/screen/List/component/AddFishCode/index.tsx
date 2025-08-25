@@ -1,18 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import './style.css';
 import TextEditor from './component/TextEditor';
 import type { FishCodeField } from '@src/dataStruct/fishCode';
 import { useAddFishCodeMutation } from '@src/redux/query/fishCodeRTK';
+import { ListContext } from '../../context';
 
 
 
 const AddFishCode: React.FC = () => {
+    const listContext = useContext(ListContext)
+    if (!listContext) {
+        throw new Error("listContext in AddFishCode component cant undefined !");
+    }
+    const {
+        setIsLoading,
+        setMessage
+    } = listContext;
+
     const [fishCodeField, setFishCodeField] = useState<FishCodeField>({
         id: -1,
         name: '',
         size: '',
-        remain: '',
-        money: '',
+        amount: '',
+        price: '',
         detail: '',
         status: '',
         userId: -1,
@@ -38,12 +48,12 @@ const AddFishCode: React.FC = () => {
                 setFishCodeField({...fishCodeField, size: value})
                 break; 
             } 
-            case 'remain': { 
-                setFishCodeField({...fishCodeField, remain: value})
+            case 'amount': { 
+                setFishCodeField({...fishCodeField, amount: value})
                 break; 
             } 
-            case 'money': { 
-                setFishCodeField({...fishCodeField, money: value})
+            case 'price': { 
+                setFishCodeField({...fishCodeField, price: value})
                 break; 
             } 
             default: { 
@@ -53,10 +63,25 @@ const AddFishCode: React.FC = () => {
         } 
     }
 
-    const handleAdd = () => {
+    const handleAdd = async () => {
+        setIsLoading(true);
         addFishCode(fishCodeField)
-        .then(res => console.log('addFishCode', res))
-        .catch(err => console.error(err))
+        .then(res => {
+            if (res.data?.isSuccess) {
+                setMessage({
+                message: 'Thêm mã cá thành công !',
+                type: 'success'
+            })
+            } 
+        })
+        .catch(err => {
+            console.error(err);
+            setMessage({
+                message: 'Thêm mã cá KHÔNG thành công !',
+                type: 'error'
+            })
+        })
+        .finally(() => setIsLoading(false))
     }
 
     return (
@@ -74,12 +99,12 @@ const AddFishCode: React.FC = () => {
                     <div><input value={fishCodeField.size} onChange={(e) => handleInputChange(e, 'size')} /></div>
                 </div>
                 <div className='List-AddFishCode-input'>
-                    <div>Còn hàng</div>
-                    <div><input value={fishCodeField.remain} onChange={(e) => handleInputChange(e, 'remain')} /></div>
+                    <div>Số lượng</div>
+                    <div><input value={fishCodeField.amount} onChange={(e) => handleInputChange(e, 'amount')} /></div>
                 </div>
                 <div className='List-AddFishCode-input'>
-                    <div>Tiền</div>
-                    <div><input value={fishCodeField.money} onChange={(e) => handleInputChange(e, 'money')} /></div>
+                    <div>Giá</div>
+                    <div><input value={fishCodeField.price} onChange={(e) => handleInputChange(e, 'price')} /></div>
                 </div>
                 <div className='List-AddFishCode-textEditor'>
                     <div>Chi tiết</div>

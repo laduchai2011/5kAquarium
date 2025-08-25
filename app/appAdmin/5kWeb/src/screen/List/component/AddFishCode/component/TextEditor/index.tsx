@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import './style.css';
 import {
     Editor,
@@ -10,7 +10,7 @@ import {
 } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import blockRendererFn from './component/blockRendererFn';
-// import type { ListField } from '@src/dataStruct/list';
+import { ListContext } from '@src/screen/List/context';
 
 
 
@@ -18,8 +18,15 @@ const TextEditor: React.FC<{
     data: string,
     onSave?: (data: string) => void
 }> = ({data, onSave}) => {
-    const editorStateInit = data.length > 0 ? EditorState.createWithContent(convertFromRaw(JSON.parse(data))) : EditorState.createEmpty();
+    const listContext = useContext(ListContext)
+    if (!listContext) {
+        throw new Error("listContext in TextEditor component cant undefined !");
+    }
+    const {
+        setMessage
+    } = listContext;
 
+    const editorStateInit = data.length > 0 ? EditorState.createWithContent(convertFromRaw(JSON.parse(data))) : EditorState.createEmpty();
     const [editorState, setEditorState] = useState(editorStateInit);
 
     const handleKeyCommand = (command: string): 'handled' | 'not-handled' => {
@@ -53,9 +60,12 @@ const TextEditor: React.FC<{
 
     const saveContent = () => {
         const rawContent = convertToRaw(editorState.getCurrentContent());
-        // console.log('Raw JSON:', rawContent);
         if (onSave) {
-            onSave(JSON.stringify(rawContent))
+            onSave(JSON.stringify(rawContent));
+            setMessage({
+                message: 'Lưu chi tiết thành công !',
+                type: 'success'
+            })
         }
     };
 

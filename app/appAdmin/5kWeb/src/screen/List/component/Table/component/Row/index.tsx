@@ -18,8 +18,10 @@ const Row: React.FC<{ data: FishCodeField, index: number }> = ({ data, index }) 
 
     useEffect(() => {
         const handleShowContent = () => {
-            const contentState = convertFromRaw(JSON.parse(data.detail));
-            setEditorState(EditorState.createWithContent(contentState));
+            if (data.detail.length > 0) {
+                const contentState = convertFromRaw(JSON.parse(data.detail));
+                setEditorState(EditorState.createWithContent(contentState));
+            }
         };
         handleShowContent()
     }, [data.detail])
@@ -42,8 +44,8 @@ const Row: React.FC<{ data: FishCodeField, index: number }> = ({ data, index }) 
                 <div className='List-Row-row-index'>{index}</div>
                 <div className='List-Row-row-name'>{data.name}</div>
                 <div className='List-Row-row-size'>{data.size}</div>
-                <div className='List-Row-row-remain'>{data.remain}</div>
-                <div className='List-Row-row-money'>{data.money}</div>
+                <div className='List-Row-row-amount'>{data.amount}</div>
+                <div className='List-Row-row-price'>{data.price}</div>
                 <div className='List-Row-row-btnContainer'>
                     <div onClick={(e) => handleAddProduct(e)}>Tạo sản phẩm</div>
                 </div>

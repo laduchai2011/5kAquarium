@@ -1,4 +1,4 @@
-import express, { Router, Request, Response } from 'express';
+import express, { Router } from 'express';
 import dotenv from 'dotenv';
 import authentication from '@src/auth';
 import Handle_AddProduct from './handle/AddProduct';
@@ -10,7 +10,7 @@ const handle_addProduct = new Handle_AddProduct();
 
 
 router_mutate_product.post(
-    '/signup',
+    '/addProduct',
     authentication,
     handle_addProduct.setup,
     handle_addProduct.main

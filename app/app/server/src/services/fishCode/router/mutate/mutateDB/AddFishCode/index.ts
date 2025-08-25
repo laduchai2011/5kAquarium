@@ -25,8 +25,8 @@ class MutateDB_AddFishCode extends MutateDB {
                     .request()
                     .input("name", sql.NVarChar(255), this._newFishCode.name)
                     .input("size", sql.NVarChar(255), this._newFishCode.size)
-                    .input("remain", sql.NVarChar(255), this._newFishCode.remain)
-                    .input("money", sql.NVarChar(255), this._newFishCode.money)
+                    .input("amount", sql.NVarChar(255), this._newFishCode.amount)
+                    .input("price", sql.NVarChar(255), this._newFishCode.price)
                     .input("detail", sql.NVarChar(sql.MAX), this._newFishCode.detail)
                     .input("userId", sql.Numeric, this._newFishCode.userId)
                     .execute<FishCodeField>('AddFishCode');

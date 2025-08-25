@@ -33,7 +33,7 @@ class MutateDB_AddProduct extends MutateDB {
                     .input("price", sql.NVarChar(255), this._newProduct.price)
                     .input("userId", sql.Numeric, this._newProduct.userId)
                     .input("fishCodeId", sql.Numeric, this._newProduct.fishCodeId)
-                    .execute<ProductField>('AddContact');
+                    .execute<ProductField>('AddProduct');
                 
                 return result
             } catch (error) {

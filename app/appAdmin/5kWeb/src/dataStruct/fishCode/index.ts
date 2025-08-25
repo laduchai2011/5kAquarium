@@ -2,8 +2,8 @@ export interface FishCodeField {
     id: number;
     name: string;
     size: string;
-    remain: string;
-    money: string;
+    amount: string;
+    price: string;
     detail: string;
     status: string;
     userId: number;
