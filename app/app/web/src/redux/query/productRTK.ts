@@ -1,0 +1,26 @@
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { PRODUCT_API } from '@src/const/api/product';
+import { MyResponse } from '@src/dataStruct/response';
+import { ProductField } from '@src/dataStruct/product';
+
+export const productRTK = createApi({
+    reducerPath: 'productRTK',
+    baseQuery: fetchBaseQuery({ 
+        baseUrl: '', 
+        credentials: 'include' 
+    }),
+    tagTypes: ['Product'],
+    endpoints: (builder) => ({
+        getAProductWithId: builder.query<ProductField, {id: string}>({
+            query: ({id}) => `${PRODUCT_API.GET_APRODUCT_WITH_ID}?id=${id}`,
+            transformResponse: (response: MyResponse<ProductField>): ProductField => {
+                if (!response.data) throw new Error('No account data');
+                return response.data;
+            }
+        }),
+    }),
+});
+
+export const { 
+   useGetAProductWithIdQuery
+} = productRTK;
