@@ -13,3 +13,5 @@ BEGIN
 	OUTPUT INSERTED.*
 	VALUES (@name, @size, @amount, @price, @detail, 'normal', @userId);
 END;
+
+delete dbo.fishCode

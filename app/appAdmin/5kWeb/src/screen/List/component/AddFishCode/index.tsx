@@ -67,12 +67,18 @@ const AddFishCode: React.FC = () => {
         setIsLoading(true);
         addFishCode(fishCodeField)
         .then(res => {
+            console.log(res)
             if (res.data?.isSuccess) {
                 setMessage({
-                message: 'Thêm mã cá thành công !',
-                type: 'success'
-            })
-            } 
+                    message: 'Thêm mã cá thành công !',
+                    type: 'success'
+                })
+            } else {
+                setMessage({
+                    message: 'Thêm mã cá KHÔNG thành công !',
+                    type: 'error'
+                })
+            }
         })
         .catch(err => {
             console.error(err);

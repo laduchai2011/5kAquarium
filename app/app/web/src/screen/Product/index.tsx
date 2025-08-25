@@ -6,41 +6,83 @@ import HeaderLeft from '@src/component/Header/HeaderLeft';
 import HeaderTop from '@src/component/Header/HeaderTop';
 import { PRODUCT } from '@src/const/text';
 import { useGetAProductWithIdQuery } from '@src/redux/query/productRTK';
+import { useGetAFishCodeWithIdQuery } from '@src/redux/query/fishCodeRTK';
 import { ProductField } from '@src/dataStruct/product';
+import { FishCodeField } from '@src/dataStruct/fishCode';
 import MainLoading from '@src/component/MainLoading';
+import MessageDialog from '@src/component/MessageDialog';
+import { MessageDataInterface } from '@src/component/MessageDialog/type';
+import TextEditorDisplay from '@src/component/TextEditorDisplay';
 
 const Product = () => {
     const { id } = useParams<{ id: string }>();
     const [product, setProduct] = useState<ProductField | undefined>(undefined);
+    const [fishCode, setFishCode] = useState<FishCodeField | undefined>(undefined);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [message, setMessage] = useState<MessageDataInterface>({
+        message: '',
+        type: 'normal'
+    })
 
     const {
-        data, 
+        data: data_product, 
         // isFetching, 
-        isLoading: isLoading_GetAProductWithId,
-        isError, 
-        error
-    } = useGetAProductWithIdQuery({id: id || ''});
-    
+        isLoading: isLoading_product,
+        isError: isError_product, 
+        error: error_product
+    } = useGetAProductWithIdQuery({id: id || ''}, { skip: !id });
     useEffect(() => {
-        if (isError && error) {
-            console.error(error);
+        if (isError_product && error_product) {
+            console.error(error_product);
+            setMessage({
+                message: 'Sản phầm không được tìm thấy !',
+                type: 'error'
+            })
         }
-    }, [isError, error])
-
+    }, [isError_product, error_product])
     useEffect(() => {
-        setIsLoading(isLoading_GetAProductWithId)
-    }, [isLoading_GetAProductWithId])
-
+        setIsLoading(isLoading_product)
+    }, [isLoading_product])
     useEffect(() => {
-        if (data) {
-            setProduct(data)
+        if (data_product) {
+            setProduct(data_product)
         }
-    }, [data]) 
+    }, [data_product]) 
+
+    const {
+        data: data_fishCode, 
+        // isFetching, 
+        isLoading: isLoading_fishCode,
+        isError: isError_fishCode, 
+        error: error_fishCode
+    } = useGetAFishCodeWithIdQuery({id: product?.fishCodeId.toString() || ''}, { skip: !product?.fishCodeId });
+    console.log('fishCodeId', product)
+    useEffect(() => {
+        if (isError_fishCode && error_fishCode) {
+            console.error(error_fishCode);
+            setMessage({
+                message: 'Sản phầm không được tìm thấy !',
+                type: 'error'
+            })
+        }
+    }, [isError_fishCode, error_fishCode])
+    useEffect(() => {
+        setIsLoading(isLoading_fishCode)
+    }, [isLoading_fishCode])
+    useEffect(() => {
+        if (data_fishCode) {
+            setFishCode(data_fishCode)
+        }
+    }, [data_fishCode]) 
+
+    const handleCloseMessage = () => {
+        setMessage({...message, message: ''})
+    }
 
     return (
         <div className={style.parent}>
             {isLoading && <MainLoading />}
+            {message.message.length > 0 && <MessageDialog message={message.message} type={message.type} onClose={() => handleCloseMessage()} />}
             <div className={style.headerLeft}><HeaderLeft header={PRODUCT} /></div>
             <div className={style.headerTop}><HeaderTop header={PRODUCT} /></div>
             { product ?
@@ -70,7 +112,7 @@ const Product = () => {
                                 </div>
                                 <div>
                                     <div>Đã bán</div>
-                                    <div>{product?.sold}</div>
+                                    <div>{product?.sold || 0}</div>
                                 </div>
                                 <div>
                                     <div>Giá</div>
@@ -99,7 +141,7 @@ const Product = () => {
                     <div className={style.describe}>
                         <div>Mô tả</div>
                         <div>
-                            <pre>dsfadas</pre> 
+                            {fishCode?.detail && <TextEditorDisplay data={fishCode?.detail} />}
                         </div>
                     </div>
                 </div> :

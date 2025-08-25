@@ -11,21 +11,28 @@ export const fishCodeRTK = createApi({
     }),
     tagTypes: ['FishCode'],
     endpoints: (builder) => ({
+        getAFishCodeWithId: builder.query<FishCodeField, {id: string}>({
+            query: ({id}) => `${FISHCODE_API.GET_AFISHCODE_WITH_ID}?id=${id}`,
+            transformResponse: (response: MyResponse<FishCodeField>): FishCodeField => {
+                if (!response.data) throw new Error('No account data (getAFishCodeWithId)');
+                return response.data;
+            }
+        }),
         getFishCodes: builder.query<PagedFishCodeField, { page: string; size: string }>({
             query: ({ page, size }) => `${FISHCODE_API.GET_FISHCODES}?page=${page}&size=${size}`,
             transformResponse: (response: { isSuccess: boolean; data: PagedFishCodeField }) => {
                 if (!response.data) throw new Error('No data');
                 return response.data;
             },
-            providesTags: (result) =>
-                result?.items
-                    ? [
-                        // Tạo tag cho từng phần tử trong trang
-                        ...result.items.map(({ id }) => ({ type: 'FishCode' as const, id })),
-                        // Tag đặc biệt cho danh sách (LIST)
-                        { type: 'FishCode', id: 'LIST' },
-                    ]
-                    : [{ type: 'FishCode', id: 'LIST' }],
+            // providesTags: (result) =>
+            //     result?.items
+            //         ? [
+            //             // Tạo tag cho từng phần tử trong trang
+            //             ...result.items.map(({ id }) => ({ type: 'FishCode' as const, id })),
+            //             // Tag đặc biệt cho danh sách (LIST)
+            //             { type: 'FishCode', id: 'LIST' },
+            //         ]
+            //         : [{ type: 'FishCode', id: 'LIST' }],
         }),
         addFishCode: builder.mutation<MyResponse<FishCodeField>, FishCodeField>({
             query: (body) => ({
@@ -123,6 +130,7 @@ export const fishCodeRTK = createApi({
 });
 
 export const { 
+    useGetAFishCodeWithIdQuery,
     useGetFishCodesQuery,
     useAddFishCodeMutation
 } = fishCodeRTK;

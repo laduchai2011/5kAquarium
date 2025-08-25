@@ -7,6 +7,7 @@ export interface ProductField {
     amount: string;
     sold: string;
     discount: string;
+    fishCodeInProduct: string;
     price: string;
     status: string;
     userId: number;

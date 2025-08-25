@@ -7,6 +7,7 @@ CREATE TABLE [product] (
     amount NVARCHAR(255) NOT NULL,
 	sold NVARCHAR(255) NOT NULL,
 	discount NVARCHAR(255) NOT NULL,
+	fishCodeInProduct NVARCHAR(255) NOT NULL,
     price NVARCHAR(255) NOT NULL,
     status NVARCHAR(255) NOT NULL,
     userId INT NOT NULL,

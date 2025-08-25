@@ -30,6 +30,7 @@ class MutateDB_AddProduct extends MutateDB {
                     .input("amount", sql.NVarChar(255), this._newProduct.amount)
                     .input("sold", sql.NVarChar(255), this._newProduct.sold)
                     .input("discount", sql.NVarChar(255), this._newProduct.discount)
+                    .input("fishCodeInProduct", sql.NVarChar(255), this._newProduct.fishCodeInProduct)
                     .input("price", sql.NVarChar(255), this._newProduct.price)
                     .input("userId", sql.Numeric, this._newProduct.userId)
                     .input("fishCodeId", sql.Numeric, this._newProduct.fishCodeId)

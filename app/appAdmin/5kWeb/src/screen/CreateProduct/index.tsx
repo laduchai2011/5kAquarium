@@ -7,6 +7,12 @@ import MessageDialog from '@src/component/MessageDialog';
 import type { MessageDataInterface } from '@src/component/MessageDialog/type';
 import axios from 'axios';
 import type { ProductField } from '@src/dataStruct/product';
+import type { FishCodeField } from '@src/dataStruct/fishCode';
+import TextEditorDisplay from '@src/component/TextEditorDisplay';
+import { useGetAFishCodeWithIdQuery } from '@src/redux/query/fishCodeRTK';
+import { useAddProductMutation } from '@src/redux/query/productRTK';
+import { useLocation } from "react-router-dom";
+import { isNumber } from '@src/utility/string';
 
 
 interface UploadImageResponse {
@@ -14,9 +20,11 @@ interface UploadImageResponse {
 }
 
 const CreateProduct: React.FC = () => {
+    const location = useLocation();
+    const fishCodeId = location?.state?.fishCodeId;
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [file, setFile] = useState<File | null>(null);
-    const [preview, setPreview] = useState<string>("");
+    const [preview, setPreview] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [message, setMessage] = useState<MessageDataInterface>({
         message: '',
@@ -31,6 +39,7 @@ const CreateProduct: React.FC = () => {
         amount: '',
         sold: '',
         discount: '',
+        fishCodeInProduct: '',
         price: '',
         status: '',
         userId: -1,
@@ -38,12 +47,49 @@ const CreateProduct: React.FC = () => {
         updateTime: '',
         createTime: '',
     })
+    const [fishCode, setFishCode] = useState<FishCodeField | undefined>(undefined)
 
     useEffect(() => {
         return () => {
             URL.revokeObjectURL(preview);
         }
     }, [preview])
+
+    const [addProduct] = useAddProductMutation()
+
+    const {
+        data: data_fishCode, 
+        // isFetching, 
+        isLoading: isLoading_fishCode,
+        isError, 
+        error
+    } = useGetAFishCodeWithIdQuery({id: fishCodeId}, { skip: !fishCodeId });
+
+    useEffect(() => {
+        if (isError && error) {
+            console.error(error);
+            setMessage({
+                message: 'Tải mã cá không thành công !',
+                type: 'error'
+            })
+        }
+    }, [isError, error, setMessage])
+
+    useEffect(() => {
+        setIsLoading(isLoading_fishCode);
+    }, [isLoading_fishCode, setIsLoading])
+
+    useEffect(() => {
+        setFishCode(data_fishCode);
+        setProduct((pre) => {
+            return {
+                ...pre,
+                name: data_fishCode?.name || '',
+                size: data_fishCode?.size || '',
+                fishCodeId: data_fishCode?.id || -1
+            }
+        })
+    }, [data_fishCode]) 
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -66,14 +112,42 @@ const CreateProduct: React.FC = () => {
             } 
             case 'amount': { 
                 setProduct({...product, amount: value})
+                if (!isNumber(value)) {
+                    setMessage({
+                        message: 'Trường số lượng không phải là số !',
+                        type: 'error'
+                    })
+                }
                 break; 
             } 
             case 'discount': { 
                 setProduct({...product, discount: value})
+                if (!isNumber(value)) {
+                    setMessage({
+                        message: 'Trường khuyến mại không phải là số !',
+                        type: 'error'
+                    })
+                }
+                break; 
+            } 
+            case 'fishCodeInProduct': { 
+                setProduct({...product, fishCodeInProduct: value})
+                if (!isNumber(value)) {
+                    setMessage({
+                        message: 'Trường số lượng cá trên mỗi số lượng sản phẩm không phải là số !',
+                        type: 'error'
+                    })
+                }
                 break; 
             } 
             case 'price': { 
                 setProduct({...product, price: value})
+                if (!isNumber(value)) {
+                    setMessage({
+                        message: 'Trường giá không phải là số !',
+                        type: 'error'
+                    })
+                }
                 break; 
             } 
             default: { 
@@ -93,7 +167,6 @@ const CreateProduct: React.FC = () => {
             const res = await axios.post<UploadImageResponse>(IMAGE_API.UPLOAD_AIMAGE, formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
-            // console.log("Uploaded:", res.data.file);
             return res.data;
         } catch (err) {
             console.error(err);
@@ -105,27 +178,92 @@ const CreateProduct: React.FC = () => {
         }
     };
 
-    const handleCreate = async () => {
-        setIsLoading(true);
-        const data = await handleUpload();
+    const isOke_checkFinalString = () => {
+        const product_cp = {...product}
+        product_cp.title = product_cp.title.trim();
+        product_cp.amount = product_cp.amount.trim()
+        product_cp.discount = product_cp.discount.trim()
+        product_cp.price = product_cp.price.trim()
+        product_cp.fishCodeInProduct = product_cp.fishCodeInProduct.trim()
 
-        if (data === null) {
+        if (!isNumber(product_cp.amount)) {
             setMessage({
-                message: 'Tạo sản phẩm thất bại !',
+                message: 'Trường số lượng không phải là số !',
                 type: 'error'
             })
+            return false
+        } else if (!isNumber(product_cp.discount)) {
+            setMessage({
+                message: 'Trường khuyến mại không phải là số !',
+                type: 'error'
+            })
+            return false
+        } else if (!isNumber(product_cp.price)) {
+            setMessage({
+                message: 'Trường giá không phải là số !',
+                type: 'error'
+            })
+            return false
+        } else if (!isNumber(product_cp.fishCodeInProduct)) {
+            setMessage({
+                message: 'Trường số lượng cá trên mỗi số lượng sản phẩm không phải là số !',
+                type: 'error'
+            })
+            return false
         }
+        setProduct(product_cp)
+        return true
+    }
 
-        if (data?.file) {
-            const imageUrl = IMAGE_API.GET_IMAGE + '/' + data.file;
-            const product_cp = {...product};
-            product_cp.image = imageUrl;
+    const handleCreate = async () => {
+        if (data_fishCode) {
+            if (isOke_checkFinalString()) {
+                const data = await handleUpload();
+
+                if (data === null) {
+                    setMessage({
+                        message: 'Tạo sản phẩm thất bại !',
+                        type: 'error'
+                    })
+                }
+
+                if (data?.file) {
+                    const imageUrl = IMAGE_API.GET_IMAGE + '/' + data.file;
+                    const product_cp = {...product};
+                    product_cp.image = imageUrl;
+                    setIsLoading(true);
+                    addProduct(product_cp)
+                    .then(res => {
+                        if (res.data?.isSuccess) {
+                            setMessage({
+                                message: 'Tạo sản phẩm thành công !',
+                                type: 'success'
+                            })
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        setMessage({
+                            message: 'Tạo sản phẩm thất bại !',
+                            type: 'error'
+                        })
+                    })
+                    .finally(() => setIsLoading(false))
+                } else {
+                    setMessage({
+                        message: 'Tạo sản phẩm thất bại !',
+                        type: 'error'
+                    })
+                }
+            } else {
+                // đã được check trong isOke_checkFinalString
+            }
         } else {
             setMessage({
-                message: 'Tạo sản phẩm thất bại !',
+                message: 'Không tìm thấy mã cá nào để tạo sản phẩm !',
                 type: 'error'
             })
-        }
+        }   
     }
 
     const handleCloseMessage = () => {
@@ -142,7 +280,7 @@ const CreateProduct: React.FC = () => {
                 <div className='CreateProduct-main1'>
                     <div>
                         <div className='CreateProduct-inputContainer'>
-                            <div>Tieu de</div>
+                            <div>Tiêu đề</div>
                             <input value={product.title} onChange={(e) => handleChangeInput(e, 'title')} />
                         </div>
                         <div className='CreateProduct-inputContainer'>
@@ -158,8 +296,8 @@ const CreateProduct: React.FC = () => {
                             <input value={product.price} onChange={(e) => handleChangeInput(e, 'price')} />
                         </div>
                         <div className='CreateProduct-inputContainer'>
-                            <div>Đơn vị cá trên mối số lượng</div>
-                            <input />
+                            <div>Số lượng cá trên mỗi số lượng sản phẩm</div>
+                            <input value={product.fishCodeInProduct} onChange={(e) => handleChangeInput(e, 'fishCodeInProduct')} />
                         </div>
                         <div className='CreateProduct-imageIcon'>
                             <input
@@ -190,23 +328,25 @@ const CreateProduct: React.FC = () => {
                         <div className='CreateProduct-fishCode-infor'>
                             <div>
                                 <div>Tên</div>
-                                <div>ten</div>
+                                <div>{fishCode?.name}</div>
                             </div>
                             <div>
                                 <div>Kích thước</div>
-                                <div>ten</div>
+                                <div>{fishCode?.size}</div>
                             </div>
                             <div>
                                 <div>Số lượng</div>
-                                <div>ten</div>
+                                <div>{fishCode?.amount}</div>
                             </div>
                             <div>
                                 <div>Giá</div>
-                                <div>ten</div>
+                                <div>{fishCode?.price}</div>
                             </div>
                             <div>
                                 <div>Chi tiết</div>
-                                <div>ten</div>
+                                <div>
+                                    {fishCode?.detail && <TextEditorDisplay data={fishCode?.detail} />}
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -64,5 +64,17 @@
 }
 
 .CreateProduct-fishCode-infor {
-    
+    margin: 10px 0;
+}
+
+.CreateProduct-fishCode-infor > div {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.CreateProduct-fishCode-infor > div > div:nth-child(1) {
+    width: 100px;
+    font-size: 1.1rem;
+    font-weight: 600;
 }

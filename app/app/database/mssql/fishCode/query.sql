@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE GetFishCodes
+﻿ALTER PROCEDURE GetFishCodes
     @page INT,
     @size INT
 AS
@@ -19,4 +19,15 @@ END
 GO
 
 DROP FUNCTION dbo.GetFishCodes;
+GO
+
+
+ALTER FUNCTION GetFishCodeWithId (@id INT) RETURNS TABLE AS RETURN (
+    SELECT
+        *
+    FROM
+        dbo.fishCode
+    WHERE
+        id = @id
+);
 GO

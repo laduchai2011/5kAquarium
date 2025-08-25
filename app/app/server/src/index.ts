@@ -17,7 +17,7 @@ const app: Express = express();
 const port = process.env.PORT || 3006;
 
 app.use(cors({
-    origin: ["http://192.168.5.100:3000", "http://192.168.5.100:5173"], // domain cho phép
+    origin: ["http://172.19.224.1:3000", "http://172.19.224.1:5173"], // domain cho phép
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true // cho phép gửi cookie, Authorization headers
 }));

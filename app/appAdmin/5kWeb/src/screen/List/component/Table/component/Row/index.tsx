@@ -35,7 +35,14 @@ const Row: React.FC<{ data: FishCodeField, index: number }> = ({ data, index }) 
 
     const handleAddProduct = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.stopPropagation();
-        navigate('/createProduct');
+        navigate(
+            '/createProduct',
+            {
+                state: {
+                    fishCodeId: data.id
+                },
+            }
+        );
     }
 
     return (
