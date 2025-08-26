@@ -56,7 +56,7 @@ const Product = () => {
         isError: isError_fishCode, 
         error: error_fishCode
     } = useGetAFishCodeWithIdQuery({id: product?.fishCodeId.toString() || ''}, { skip: !product?.fishCodeId });
-    console.log('fishCodeId', product)
+
     useEffect(() => {
         if (isError_fishCode && error_fishCode) {
             console.error(error_fishCode);

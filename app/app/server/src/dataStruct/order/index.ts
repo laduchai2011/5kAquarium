@@ -1,0 +1,40 @@
+export interface OrderField {
+    id: number;
+    title: string;
+    image: string;
+    name: string;
+    size: string;
+    amount: string;
+    discount: string;
+    fishCodeInProduct: string;
+    price: string;
+    status: string;
+    userId: number;
+    productId: number;
+    sellerId: number;
+    updateTime: string;
+    createTime: string;
+}
+
+export interface OrderProcessField {
+    id: number;
+    isOrder: boolean;
+    isConfirm: boolean;
+    confirmUser: boolean;
+    isSend: boolean;
+    sendUser: boolean;
+    isReceive: boolean;
+    isPay: boolean;
+    userId: number;
+    updateTime: string;
+    createTime: string;
+}
+
+export interface OrderProcessField {
+    id: number;
+    method: string;
+    infor: string;
+    userId: number;
+    updateTime: string;
+    createTime: string;
+}

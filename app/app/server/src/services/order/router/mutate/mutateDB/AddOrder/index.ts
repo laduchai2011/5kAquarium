@@ -1,9 +1,9 @@
 import sql from 'mssql';
 import { MutateDB } from '@src/services/order/interface';
-import { signup_infor_type } from '../../handle/signup/type';
+import { signup_infor_type } from '../../handle/AddOrder/type';
 import { AccountField } from '@src/dataStruct/account';
 
-class MutateDB_Signup extends MutateDB {
+class MutateDB_AddOrder extends MutateDB {
     private _connectionPool: sql.ConnectionPool | undefined;
     private _signup_infor: signup_infor_type | undefined;
 
@@ -90,4 +90,4 @@ async function SignupToDB(
     return result;
 }
 
-export default MutateDB_Signup;
+export default MutateDB_AddOrder;
