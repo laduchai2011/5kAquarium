@@ -3,6 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { accountRTK } from './query/accountRTK';
 import { productRTK } from './query/productRTK';
 import { fishCodeRTK } from './query/fishCodeRTK';
+import { orderRTK } from './query/orderRTK';
 import appReducer from '@src/redux/slice/appSlice';
 import headerLeftReducer from '@src/redux/slice/headerLeftSlice';
 
@@ -13,11 +14,13 @@ export const store = configureStore({
         [accountRTK.reducerPath]: accountRTK.reducer,
         [productRTK.reducerPath]: productRTK.reducer,
         [fishCodeRTK.reducerPath]: fishCodeRTK.reducer,
+        [orderRTK.reducerPath]: orderRTK.reducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(
         accountRTK.middleware,
         productRTK.middleware,
-        fishCodeRTK.middleware
+        fishCodeRTK.middleware,
+        orderRTK.middleware
     ),
 });
 

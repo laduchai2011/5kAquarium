@@ -9,10 +9,14 @@ import { useGetAProductWithIdQuery } from '@src/redux/query/productRTK';
 import { useGetAFishCodeWithIdQuery } from '@src/redux/query/fishCodeRTK';
 import { ProductField } from '@src/dataStruct/product';
 import { FishCodeField } from '@src/dataStruct/fishCode';
+import { OrderField } from '@src/dataStruct/order';
 import MainLoading from '@src/component/MainLoading';
 import MessageDialog from '@src/component/MessageDialog';
 import { MessageDataInterface } from '@src/component/MessageDialog/type';
 import TextEditorDisplay from '@src/component/TextEditorDisplay';
+import { useAddOrderWithTransactionMutation } from '@src/redux/query/orderRTK';
+import { isNumber } from '@src/utility/string';
+
 
 const Product = () => {
     const { id } = useParams<{ id: string }>();
@@ -23,6 +27,29 @@ const Product = () => {
         message: '',
         type: 'normal'
     })
+    const [moneyTotal, setMoneyTotal] = useState({
+        old: 0,
+        new: 0
+    })
+    const [sellerId, setSellerId] = useState<string>('')
+    const [addOrderWithTransaction] = useAddOrderWithTransactionMutation();
+    const [order, setOrder] = useState<OrderField>({
+        id: -1,
+        title: '',
+        image: '',
+        name: '',
+        size: '',
+        amount: '0',
+        discount: '',
+        fishCodeInProduct: '',
+        price: '',
+        status: '',
+        userId: -1,
+        productId: -1,
+        sellerId: 1,
+        updateTime: '',
+        createTime: '',
+    });
 
     const {
         data: data_product, 
@@ -46,6 +73,12 @@ const Product = () => {
     useEffect(() => {
         if (data_product) {
             setProduct(data_product)
+            setOrder(pre => {
+                return {
+                    ...pre,
+                    productId: data_product.id
+                }
+            })
         }
     }, [data_product]) 
 
@@ -79,6 +112,72 @@ const Product = () => {
         setMessage({...message, message: ''})
     }
 
+    const handleAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        if (!isNumber(value)) {
+            setMessage({
+                message: 'Số lượng phải là 1 số !',
+                type: 'error'
+            })
+        } else {
+            handleMoney(value);
+            setOrder({...order, amount: value});
+        }
+    }
+
+    const handleSubAmount = () => {
+        const {amount} = order;
+        if (isNumber(amount)) {
+            let amount_number = Number(amount);
+            if (amount_number > 1) {
+                amount_number = amount_number - 1;
+                setOrder({...order, amount: amount_number.toString()})
+                handleMoney(amount_number.toString());
+            } 
+        }
+    }
+
+    const handleAddAmount = () => {
+        const {amount} = order;
+        const maxAmount = product?.amount
+        if (isNumber(amount) && maxAmount && isNumber(maxAmount)) {
+            let amount_number = Number(amount);
+            const maxAmount_number = Number(maxAmount)
+            if (amount_number < maxAmount_number) {
+                amount_number = amount_number + 1;
+                setOrder({...order, amount: amount_number.toString()})
+                handleMoney(amount_number.toString());
+            } 
+        }
+    }
+
+    const handleMoney = (amount: string) => {
+        const discount = product?.discount;
+        const price = product?.price;
+        if (amount && discount && price) {
+            const amount_number = Number(amount);
+            const discount_number = Number(discount);
+            const price_number = Number(price);
+
+            const oldTotal = amount_number * price_number;
+            const discountTotal = oldTotal * (discount_number / 100);
+            const newTotal = oldTotal - discountTotal;
+
+            setMoneyTotal({
+                old: oldTotal,
+                new: newTotal
+            })
+        }
+    }
+
+    const handleSellerId = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+    }
+
+    const handleAddOrder = () => {
+
+    }
+
     return (
         <div className={style.parent}>
             {isLoading && <MainLoading />}
@@ -104,7 +203,7 @@ const Product = () => {
                                 </div>
                                 <div>
                                     <div>Giảm giá</div>
-                                    <div>{product?.discount}</div>
+                                    <div>{`${product?.discount} %`}</div>
                                 </div>
                                 <div>
                                     <div>Số lượng</div>
@@ -116,27 +215,46 @@ const Product = () => {
                                 </div>
                                 <div>
                                     <div>Giá</div>
-                                    <div>{product?.price}</div>
+                                    <div>{`${product?.price} VND`}</div>
                                 </div>
                             </div>
                             <div className={style.order}>
-                                <div className={style.ordertitle}>Đặt hàng tại đây, bạn đã đặt 10</div>
+                                <div className={style.ordertitle}>{`Đặt hàng tại đây, bạn đã đặt ${order.amount}`}</div>
                                 <div className={style.buttonContainer}>
                                     <div>
                                         <div>
                                             <div className={style.amountInput}>
-                                                <div><GrFormSubtract size={30} /></div>
-                                                <div><input /></div>
-                                                <div><GrFormAdd size={30} /></div>
+                                                <div><GrFormSubtract onClick={() => handleSubAmount()} size={30} /></div>
+                                                <div><input value={order.amount} onChange={(e) => handleAmount(e)} /></div>
+                                                <div><GrFormAdd onClick={() => handleAddAmount()} size={30} /></div>
                                             </div>
                                         </div>
                                         <div>
-                                            <div className={style.orderBtn}>Đặt hàng</div>
+                                            <div className={style.orderBtn} onClick={() => handleAddOrder()}>Đặt hàng</div>
                                         </div>
+                                    </div>
+                                </div>
+                                <div className={style.moneyTotal}>
+                                    <div>
+                                        <div>{order.amount}</div>
+                                        <div>{moneyTotal.old}</div>
+                                        <div>{moneyTotal.new}</div>
+                                        <div>VND</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div className={style.seller}>
+                        <div>Người bán</div>
+                        <div>Cần có thông tin người bán để được giảm giá</div>
+                        <div>
+                            <input value={sellerId} onChange={(e) => handleSellerId(e)} placeholder='Nhập id người bán tại đây' />
+                        </div>
+                    </div>
+                    <div className={style.paymentMethod}>
+                        <div>Phương thức thanh toán</div>
+                        <div>Liên hệ người bán</div>
                     </div>
                     <div className={style.describe}>
                         <div>Mô tả</div>
