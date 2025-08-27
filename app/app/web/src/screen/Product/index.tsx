@@ -79,7 +79,14 @@ const Product = () => {
             setOrder(pre => {
                 return {
                     ...pre,
-                    productId: data_product.id
+                    title: data_product.title,
+                    name: data_product.name,
+                    image: data_product.image,
+                    size: data_product.size,
+                    productId: data_product.id,
+                    discount: data_product.discount,
+                    fishCodeInProduct: data_product.fishCodeInProduct,
+                    price: data_product.price
                 }
             })
         }
@@ -222,6 +229,26 @@ const Product = () => {
                 createTime: ''
             }
         }
+        setIsLoading(true);
+        addOrderWithTransaction(orderBody)
+        .then(res => {
+            if (res.data?.isSuccess) {
+                setMessage({
+                    message: 'Bạn đã đặt hàng, hãy theo dõi đơn hàng của bạn !',
+                    type: 'success'
+                })
+            }
+        })
+        .catch(err => {
+            console.error(err)
+            setMessage({
+                message: 'Đặt hàng thất bại !',
+                type: 'error'
+            })
+        })
+        .finally(() => {
+            setIsLoading(false);
+        })
     }
 
     return (

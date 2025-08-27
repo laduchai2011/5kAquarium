@@ -43,3 +43,8 @@ export type AddOrderBody = {
     order: OrderField, 
     paymentMethod: OrderPaymentMethodField
 }
+
+export interface PagedOrderField {
+    items: OrderField[],
+    totalCount: number
+}

@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import AppRouter from '@src/router';
 import axiosInstance from '@src/api/axiosInstance';
 import { MyResponse } from '@src/dataStruct/response';
-import type { RootState, AppDispatch } from '@src/redux';
-import { useSelector, useDispatch } from 'react-redux';
+import type { AppDispatch } from '@src/redux';
+import { useDispatch } from 'react-redux';
 import { set_id, set_isSignin, set_isLoading } from '@src/redux/slice/appSlice';
 import { unstable_batchedUpdates } from 'react-dom';
 import NormalLoading from '@src/component/NormalLoading';
@@ -11,15 +11,17 @@ import { useGetStatisticQuery, useCreateStatisticMutation } from '@src/redux/que
 
 
 const App = () => {
-    const isLoading: boolean = useSelector((state: RootState) => state.appSlice.isLoading);
+    // const isLoading: boolean = useSelector((state: RootState) => state.appSlice.isLoading);
     const dispatch = useDispatch<AppDispatch>();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
         const myId = sessionStorage.getItem("myId");
         if (myId === null) {
             const fetchCheckSignin = async () => {
                 try {
-                    dispatch(set_isLoading(true));
+                    // dispatch(set_isLoading(true));
+                    setIsLoading(true)
                     const response = await axiosInstance.get<MyResponse<number>>(
                         `/api/service_account/query/isSignin`
                     );
@@ -36,7 +38,8 @@ const App = () => {
                 } catch (error) {
                     console.error(error);
                 } finally {
-                    dispatch(set_isLoading(false));
+                    // dispatch(set_isLoading(false));
+                    setIsLoading(false)
                 }
             }
 
@@ -65,8 +68,8 @@ const App = () => {
     }, [isError_Statistic, error_Statistic])
 
     useEffect(() => {
-        dispatch(set_isLoading(isLoading_Statistic));
-    }, [dispatch, isLoading_Statistic])
+       set_isLoading(isLoading_Statistic);
+    }, [isLoading_Statistic])
 
     useEffect(() => {
         const resData = data_Statistic

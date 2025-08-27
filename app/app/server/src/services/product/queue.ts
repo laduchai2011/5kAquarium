@@ -8,6 +8,7 @@ import { my_log } from "@src/log";
 
 const queue = () => {
     consumeTasks<OrderField>('addOrder-to-provider', async (data) => {
+        console.log(11111111, data)
         const queryDB_get_aProductWithId = new QueryDB_Get_AProductWithId();
         const mutateDB_orderUpdateChangeProductAmount = new MutateDB_OrderUpdateChangeProductAmount();
         const conn = mssql_server.get_connectionPool();
