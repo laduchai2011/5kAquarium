@@ -1,7 +1,10 @@
 import express, { Express } from 'express';
 import dotenv from 'dotenv';
+import queue from './queue';
 
 dotenv.config();
+
+queue()
 
 import router_query_order from './router/query';
 import router_mutate_order from './router/mutate';

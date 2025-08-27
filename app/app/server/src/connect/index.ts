@@ -8,6 +8,11 @@ dotenv.config();
 
 const mssql_server = new MSSQL_Server();
 const mssql_change_history_server = new MSSQL_Change_History_Server();
-const redis_server = new REDIS_Server();
+const redis_server = REDIS_Server.getInstance();
+redis_server.init();
+process.on('SIGINT', async () => {
+    await redis_server.close();
+    process.exit(0);
+});
 
 export { mssql_server, mssql_change_history_server, redis_server, serviceRedlock };

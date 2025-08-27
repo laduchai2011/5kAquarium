@@ -19,7 +19,7 @@ class QueryDB_Get_AccountWithId extends QueryDB {
     }
 
     async run(): Promise<sql.IResult<AccountField> | void> {
-        if (this._connectionPool !== undefined && this._userId !==undefined) {
+        if (this._connectionPool !== undefined && this._userId !== undefined) {
             try {
                 const result = await this._connectionPool
                     .request()

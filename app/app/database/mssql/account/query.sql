@@ -46,6 +46,9 @@ CREATE FUNCTION GetAccountWithId (@userId INT) RETURNS TABLE AS RETURN (
         id = @userId     
 );
 GO
+SELECT * 
+FROM sys.objects 
+WHERE name = 'GetAccountWithId' AND type = 'IF';
 
 ALTER FUNCTION GetStatistic (@userId INT) RETURNS TABLE AS RETURN (
     SELECT

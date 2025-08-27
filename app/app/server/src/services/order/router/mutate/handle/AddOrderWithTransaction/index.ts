@@ -4,6 +4,7 @@ import { MyResponse } from '@src/dataStruct/response';
 import { OrderField, AddOrderBody } from '@src/dataStruct/order';
 import { verifyRefreshToken } from '@src/token';
 import MutateDB_AddOrderWithTransaction from '../../mutateDB/AddOrderWithTransaction';
+import { produceTask } from '@src/queueRedis/producer';
 
 
 
@@ -69,9 +70,11 @@ class Handle_AddOrderWithTransaction {
         try {
             const result = await mutateDB_addOrderWithTransaction.run();
             if (result?.recordset.length && result?.recordset.length > 0) {
+                const data = result.recordset[0]
+                produceTask<OrderField>('addOrder-to-provider', data);
                 myResponse.message = 'Đặt hàng thành công !';
                 myResponse.isSuccess = true;
-                myResponse.data = result?.recordset[0];
+                myResponse.data = data;
                 return res.json(myResponse);
             } else {
                 myResponse.message = 'Đặt hàng KHÔNG thành công !';

@@ -25,7 +25,7 @@ export interface OrderProcessField {
     sendUser: boolean;
     isReceive: boolean;
     isPay: boolean;
-    userId: number;
+    orderId: number;
     updateTime: string;
     createTime: string;
 }
@@ -34,7 +34,7 @@ export interface OrderPaymentMethodField {
     id: number;
     method: string;
     infor: string;
-    userId: number;
+    orderId: number;
     updateTime: string;
     createTime: string;
 }

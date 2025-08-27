@@ -18,3 +18,18 @@ BEGIN
 	OUTPUT INSERTED.*
 	VALUES (@title, @image, @name, @size, @amount, @sold, @discount, @fishCodeInProduct, @price, 'normal', @userId, @fishCodeId);
 END;
+GO
+
+ALTER PROCEDURE ChangeProductAmount
+	  @id INT,
+	  @amount NVARCHAR(255)
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	UPDATE dbo.product
+	SET amount = @amount
+	OUTPUT INSERTED.*
+	WHERE id = @id
+END;
+GO

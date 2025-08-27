@@ -26,7 +26,7 @@ export const accountRTK = createApi({
                     : [{ type: 'Account', id: 'LIST' }],
         }),
         getAccountWithId: builder.query<AccountField, {id: string}>({
-            query: ({id}) => `${ACCOUNT_API.GET_ACCOUNT}?id=${id}`,
+            query: ({id}) => `${ACCOUNT_API.GET_ACCOUNT_WITH_ID}?id=${id}`,
             transformResponse: (response: MyResponse<AccountField>): AccountField => {
                 if (!response.data) throw new Error('No account data');
                 return response.data;
@@ -122,6 +122,7 @@ export const accountRTK = createApi({
 
 export const { 
     useGetAccountQuery,
+    useGetAccountWithIdQuery,
     useGetContactsQuery,
     useGetStatisticQuery,
     useChangeAvatarMutation,

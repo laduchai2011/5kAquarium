@@ -69,3 +69,17 @@ BEGIN
     END CATCH
 END;
 GO
+
+ALTER PROCEDURE ChangeOrderProcessIsOrder
+	  @orderId INT,
+	  @isOrder BIT
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	UPDATE dbo.orderProcess
+	SET isOrder = @isOrder
+	OUTPUT INSERTED.*
+	WHERE orderId = @orderId
+END;
+GO

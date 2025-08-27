@@ -7,15 +7,17 @@ import HeaderTop from '@src/component/Header/HeaderTop';
 import { PRODUCT } from '@src/const/text';
 import { useGetAProductWithIdQuery } from '@src/redux/query/productRTK';
 import { useGetAFishCodeWithIdQuery } from '@src/redux/query/fishCodeRTK';
+import { useGetAccountWithIdQuery } from '@src/redux/query/accountRTK';
 import { ProductField } from '@src/dataStruct/product';
 import { FishCodeField } from '@src/dataStruct/fishCode';
-import { OrderField } from '@src/dataStruct/order';
+import { OrderField, AddOrderBody, OrderPaymentMethodField } from '@src/dataStruct/order';
 import MainLoading from '@src/component/MainLoading';
 import MessageDialog from '@src/component/MessageDialog';
 import { MessageDataInterface } from '@src/component/MessageDialog/type';
 import TextEditorDisplay from '@src/component/TextEditorDisplay';
 import { useAddOrderWithTransactionMutation } from '@src/redux/query/orderRTK';
 import { isNumber } from '@src/utility/string';
+import { AccountField } from '@src/dataStruct/account';
 
 
 const Product = () => {
@@ -32,6 +34,7 @@ const Product = () => {
         new: 0
     })
     const [sellerId, setSellerId] = useState<string>('')
+    const [seller, setSeller] = useState<AccountField | undefined>(undefined)
     const [addOrderWithTransaction] = useAddOrderWithTransactionMutation();
     const [order, setOrder] = useState<OrderField>({
         id: -1,
@@ -108,6 +111,37 @@ const Product = () => {
         }
     }, [data_fishCode]) 
 
+    const {
+        data: data_seller, 
+        // isFetching, 
+        isLoading: isLoading_seller,
+        isError: isError_seller, 
+        error: error_seller
+    } = useGetAccountWithIdQuery({id: sellerId}, { skip: sellerId.length === 0 });
+    useEffect(() => {
+        if (isError_seller && error_seller) {
+            console.error(error_seller);
+            setMessage({
+                message: 'Không tìm thấy người bán !',
+                type: 'warn'
+            })
+        }
+    }, [isError_seller, error_seller])
+    useEffect(() => {
+        setIsLoading(isLoading_seller)
+    }, [isLoading_seller])
+    useEffect(() => {
+        if (data_seller) {
+            setSeller(data_seller)
+            setOrder(pre => {
+                return {
+                    ...pre,
+                    sellerId: data_seller.id
+                }
+            })
+        }
+    }, [data_seller]) 
+
     const handleCloseMessage = () => {
         setMessage({...message, message: ''})
     }
@@ -171,11 +205,23 @@ const Product = () => {
     }
 
     const handleSellerId = (e: React.ChangeEvent<HTMLInputElement>) => {
-
+        const value = e.target.value;
+        setSeller(undefined);
+        setSellerId(value.trim())
     }
 
     const handleAddOrder = () => {
-
+        const orderBody: AddOrderBody = {
+            order: order,
+            paymentMethod: {
+                id: -1,
+                method: 'cash',
+                infor: '',
+                orderId: -1,
+                updateTime: '',
+                createTime: ''
+            }
+        }
     }
 
     return (
@@ -251,6 +297,7 @@ const Product = () => {
                         <div>
                             <input value={sellerId} onChange={(e) => handleSellerId(e)} placeholder='Nhập id người bán tại đây' />
                         </div>
+                        {seller && <div>{`${seller?.firstName} ${seller?.lastName}`}</div>}
                     </div>
                     <div className={style.paymentMethod}>
                         <div>Phương thức thanh toán</div>
