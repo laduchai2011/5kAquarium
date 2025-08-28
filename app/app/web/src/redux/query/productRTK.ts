@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { PRODUCT_API } from '@src/const/api/product';
 import { MyResponse } from '@src/dataStruct/response';
-import { ProductField } from '@src/dataStruct/product';
+import { ProductField, PagedProductField } from '@src/dataStruct/product';
 
 export const productRTK = createApi({
     reducerPath: 'productRTK',
@@ -18,9 +18,18 @@ export const productRTK = createApi({
                 return response.data;
             }
         }),
+        getProducts: builder.query<PagedProductField, { page: string; size: string }>({
+            query: ({ page, size }) => `${PRODUCT_API.GET_APRODUCTS}?page=${page}&size=${size}`,
+            transformResponse: (response: { isSuccess: boolean; data: PagedProductField }) => {
+                if (!response.data) throw new Error('No data');
+                return response.data;
+            },
+            
+        }),
     }),
 });
 
 export const { 
-   useGetAProductWithIdQuery
+   useGetAProductWithIdQuery,
+   useGetProductsQuery
 } = productRTK;

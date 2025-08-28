@@ -15,3 +15,8 @@ export interface ProductField {
     updateTime: string;
     createTime: string;
 }
+
+export interface PagedProductField {
+    items: ProductField[],
+    totalCount: number
+}

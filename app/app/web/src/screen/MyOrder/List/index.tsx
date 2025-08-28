@@ -15,12 +15,12 @@ const List = () => {
         orders
     } = myOrderContext;
 
-    const goToProduct = () => {
-        navigate('/product');
+    const goToProduct = (id: number) => {
+        navigate(`/product/${id}`);
     }
 
     const list_order = orders?.map((data, index) => {
-        return <div key={data.id} onClick={() => goToProduct()}><Row data={data} index={index} /></div>
+        return <div key={data.id} onClick={() => goToProduct(data.productId)}><Row data={data} index={index} /></div>
     })
 
     return (

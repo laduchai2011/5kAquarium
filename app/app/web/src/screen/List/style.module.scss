@@ -36,6 +36,10 @@
             @include responsive(lg) {
                 width: 100%;
             }
+
+            > .control {
+                margin: 10px 0;
+            }
         } 
     }
 }

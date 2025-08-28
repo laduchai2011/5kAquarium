@@ -3,22 +3,30 @@ import style from './style.module.scss';
 import HeaderLeft from '@src/component/Header/HeaderLeft';
 import HeaderTop from '@src/component/Header/HeaderTop';
 import { LIST } from '@src/const/text';
-import Row from './Row';
+import Rows from './Rows';
+import Control from './Control';
 import { useGetFishCodesAccordingtoNameQuery } from '@src/redux/query/fishCodeRTK';
 import MainLoading from '@src/component/MainLoading';
 import MessageDialog from '@src/component/MessageDialog';
 import { MessageDataInterface } from '@src/component/MessageDialog/type';
+import { useNavigate } from 'react-router-dom';
+import { FishCodeContextInterface } from './type';
+import { FishCodeContext } from './context';
+import { PagedFishCodeField } from '@src/dataStruct/fishCode';
 
 
 const List = () => {
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [data, setData] = useState<PagedFishCodeField | undefined>(undefined);
+    const [page, setPage] = useState<string>('1');
     const [message, setMessage] = useState<MessageDataInterface>({
         message: '',
         type: 'normal'
     })
 
     const {
-        data, 
+        data: data_, 
         // isFetching, 
         isLoading: isLoading_,
         isError, 
@@ -37,27 +45,52 @@ const List = () => {
         setIsLoading(isLoading_);
     }, [isLoading_, setIsLoading])
     useEffect(() => {
-        const resData = data;
-    }, [data]) 
+        setData(data_);
+    }, [data_]) 
 
     const handleCloseMessage = () => {
         setMessage({...message, message: ''})
     }
 
-    return (
-        <div className={style.parent}>
-            <div className={style.headerLeft}><HeaderLeft header={LIST} /></div>
-            <div className={style.headerTop}><HeaderTop header={LIST} /></div>
-            {isLoading && <MainLoading />}
-            {message.message.length > 0 && <MessageDialog message={message.message} type={message.type} onClose={() => handleCloseMessage()} />}
-            <div className={style.main}>
-                <div className={style.main1}>
-                    <Row isHeader={true} />
-                    <Row isHeader={false} />
-                    <Row isHeader={false} />
-                    <Row isHeader={false} />
-                    <Row isHeader={false} />
+    const myId = sessionStorage.getItem("myId");
+
+    const valueContext: FishCodeContextInterface = {
+        fishCodes: data?.items,
+        totalCount: data?.totalCount,
+        page: page,
+        setPage: setPage,
+        setIsLoading,
+        setMessage
+    }
+
+    if (myId !== null) {
+        return (
+            <FishCodeContext.Provider value={valueContext}>
+                <div className={style.parent}>
+                    <div className={style.headerLeft}><HeaderLeft header={LIST} /></div>
+                    <div className={style.headerTop}><HeaderTop header={LIST} /></div>
+                    {isLoading && <MainLoading />}
+                    {message.message.length > 0 && <MessageDialog message={message.message} type={message.type} onClose={() => handleCloseMessage()} />}
+                    <div className={style.main}>
+                        <div className={style.main1}>
+                            <div className={style.control}>
+                                <Control />
+                            </div>
+                            <div>
+                                <Rows />
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </FishCodeContext.Provider>
+        )
+    }
+
+    return (
+        <div className={style.parent1}>
+            <div> 
+                <div>Bạn chưa đăng nhập</div>
+                <button onClick={() => navigate('/signin')}>Đăng nhập</button>
             </div>
         </div>
     )

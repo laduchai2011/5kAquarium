@@ -9,12 +9,13 @@ import { HeaderSelections, HeaderSelected } from '@src/component/Header/HeaderLe
 import { useNavigate } from 'react-router-dom';
 
 
+
 const HeaderLeft: FC<{header: string}> = ({header}) => {
     const navigate = useNavigate();
     const parent_element = useRef<HTMLDivElement | null>(null);
     const dispatch = useDispatch<AppDispatch>();
     const isShow: boolean = useSelector((state: RootState) => state.headerLeftSlice.isShow);
-    // const headerSelected: HeaderSelections = useSelector((state: RootState) => state.headerLeftSlice.headerSelected);
+    const currentProductId: number = useSelector((state: RootState) => state.productSlice.currentProductId);
 
     useEffect(() => {
         if (parent_element.current) {
@@ -37,7 +38,7 @@ const HeaderLeft: FC<{header: string}> = ({header}) => {
                 break; 
             } 
             case HeaderSelections.PRODUCT: { 
-                navigate('/product')
+                navigate(`/product/${currentProductId}`)
                 break; 
             } 
             case HeaderSelections.LIST: { 
