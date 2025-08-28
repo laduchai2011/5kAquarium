@@ -1,27 +1,31 @@
+import { useContext } from 'react';
 import style from './style.module.scss';
 import Row from './Row';
 import { useNavigate } from 'react-router-dom';
+import { MyOrderContext } from '../context';
 
 
 const List = () => {
     const navigate = useNavigate();
+    const myOrderContext = useContext(MyOrderContext)
+    if (!myOrderContext) {
+        throw new Error("myOrderContext in List component cant undefined !");
+    }
+    const {
+        orders
+    } = myOrderContext;
 
     const goToProduct = () => {
         navigate('/product');
     }
 
+    const list_order = orders?.map((data, index) => {
+        return <div key={data.id} onClick={() => goToProduct()}><Row data={data} index={index} /></div>
+    })
+
     return (
         <div className={style.parent}>
-            <div onClick={() => goToProduct()}><Row /></div>
-            <div onClick={() => goToProduct()}><Row /></div>
-            <div onClick={() => goToProduct()}><Row /></div>
-            <div onClick={() => goToProduct()}><Row /></div>
-            <div onClick={() => goToProduct()}><Row /></div>
-            <div onClick={() => goToProduct()}><Row /></div>
-            <div onClick={() => goToProduct()}><Row /></div>
-            <div onClick={() => goToProduct()}><Row /></div>
-            <div onClick={() => goToProduct()}><Row /></div>
-            <div onClick={() => goToProduct()}><Row /></div>
+            { list_order }
         </div>
     )
 }

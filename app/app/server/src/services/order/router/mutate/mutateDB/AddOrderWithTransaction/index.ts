@@ -29,17 +29,17 @@ class MutateDB_AddOrderWithTransaction extends MutateDB {
             try {
                 const result = await this._connectionPool
                     .request()
-                    .input("title", sql.NVarChar(255), this._newOrder.name)
-                    .input("image", sql.NVarChar(255), this._newOrder.name)
+                    .input("title", sql.NVarChar(255), this._newOrder.title)
+                    .input("image", sql.NVarChar(255), this._newOrder.image)
                     .input("name", sql.NVarChar(255), this._newOrder.name)
                     .input("size", sql.NVarChar(255), this._newOrder.size)
                     .input("amount", sql.NVarChar(255), this._newOrder.amount)
-                    .input("discount", sql.NVarChar(255), this._newOrder.amount)
-                    .input("fishCodeInProduct", sql.NVarChar(255), this._newOrder.amount)
+                    .input("discount", sql.NVarChar(255), this._newOrder.discount)
+                    .input("fishCodeInProduct", sql.NVarChar(255), this._newOrder.fishCodeInProduct)
                     .input("price", sql.NVarChar(255), this._newOrder.price)
                     .input("userId", sql.Numeric, this._newOrder.userId)
-                    .input("productId", sql.Numeric, this._newOrder.userId)
-                    .input("sellerId", sql.Numeric, this._newOrder.userId)
+                    .input("productId", sql.Numeric, this._newOrder.productId)
+                    .input("sellerId", sql.Numeric, this._newOrder.sellerId)
                     .input("paymentMethod", sql.NVarChar(255), this._newOrderPaymentMethod.method)
                     .input("paymentInfo", sql.NVarChar(sql.MAX), this._newOrderPaymentMethod.infor)
                     .execute('AddOrderWithTransaction');

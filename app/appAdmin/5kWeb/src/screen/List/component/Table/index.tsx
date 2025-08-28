@@ -27,7 +27,6 @@ const Table: React.FC = () => {
         isError, 
         error
     } = useGetFishCodesQuery({page: '1', size: '10'});
-
     useEffect(() => {
         if (isError && error) {
             console.error(error);
@@ -37,11 +36,9 @@ const Table: React.FC = () => {
             })
         }
     }, [isError, error, setMessage])
-
     useEffect(() => {
         setIsLoading(isLoading);
     }, [isLoading, setIsLoading])
-
     useEffect(() => {
         const resData = data;
         if (resData) {

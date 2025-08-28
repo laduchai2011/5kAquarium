@@ -28,7 +28,7 @@ BEGIN
     WITH MyOrder AS (
         SELECT *,
                ROW_NUMBER() OVER (ORDER BY id DESC) AS rn
-        FROM dbo.order
+        FROM dbo.[order]
 		WHERE userId = @userId
     )
     SELECT *
@@ -36,6 +36,6 @@ BEGIN
     WHERE rn BETWEEN ((@page - 1) * @size + 1) AND (@page * @size);
 
     -- Tập kết quả 2: tổng số dòng
-    SELECT COUNT(*) AS totalCount FROM dbo.order;
+    SELECT COUNT(*) AS totalCount FROM dbo.[order];
 END
 GO

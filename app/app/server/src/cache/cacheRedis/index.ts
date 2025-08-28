@@ -1,18 +1,29 @@
 import { redis_server } from '@src/connect';
 import { RedisClientType } from 'redis';
+// import { my_log } from '@src/log';
 
 
 class ServiceRedis {
     private _clientRedis!: RedisClientType
+    private _isReady = false;
+
     constructor() {
+        // this._clientRedis = redis_server.get_client();
+        // this._clientRedis.on('error', err => console.error(`(ServiceRedis-constructor), err: ${err}`));
+        // this._clientRedis.connect();
+       
+    }
+
+    async init() {
+        await redis_server.init();
         this._clientRedis = redis_server.get_client();
         this._clientRedis.on('error', err => console.error(`(ServiceRedis-constructor), err: ${err}`));
-        // this._clientRedis.connect();
-        if (!this._clientRedis.isOpen) {
-            this._clientRedis.connect().catch(err => {
-                console.error('(ServiceRedis-connect) Error:', err);
-            });
-        }
+        // console.log(11111111, this._isReady)
+        // if (!this._isReady) {
+        //     const conn = await this._clientRedis.connect();
+        //     console.log(22222222, conn)
+        //     this._isReady = true;
+        // }
     }
 
     async setData<T>(key: string, jsonValue: T, timeExpireat: number) {
@@ -32,6 +43,7 @@ class ServiceRedis {
     async getData<T>(key: string): Promise<T> {
         if (key) {
             const result = await this._clientRedis.get(key)
+            // console.log(33333333, result)
             if (result) {
                 const valueToJson = JSON.parse(result);
                 return valueToJson as T

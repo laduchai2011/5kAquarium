@@ -10,7 +10,7 @@ import { useGetAFishCodeWithIdQuery } from '@src/redux/query/fishCodeRTK';
 import { useGetAccountWithIdQuery } from '@src/redux/query/accountRTK';
 import { ProductField } from '@src/dataStruct/product';
 import { FishCodeField } from '@src/dataStruct/fishCode';
-import { OrderField, AddOrderBody, OrderPaymentMethodField } from '@src/dataStruct/order';
+import { OrderField, AddOrderBody } from '@src/dataStruct/order';
 import MainLoading from '@src/component/MainLoading';
 import MessageDialog from '@src/component/MessageDialog';
 import { MessageDataInterface } from '@src/component/MessageDialog/type';

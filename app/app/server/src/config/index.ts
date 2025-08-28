@@ -26,4 +26,12 @@ const redis_config: my_interface['redis']['config'] = {
     password: process.env.REDIS_SERVER_PASSWORD || '',
 };
 
-export { mssql_config, mssql_change_history_config, redis_config };
+const rabbitmq_config: my_interface['rabbitmq']['config'] = {
+    host: process.env.RABBITMQ_SERVER_HOST || '127.0.0.1',
+    port: Number(process.env.RABBITMQ_SERVER_POST) || 5672,
+    username: process.env.RABBITMQ_SERVER_USERNAME || 'laduchai',
+    password: process.env.RABBITMQ_SERVER_PASSWORD || '201195',
+};
+
+
+export { mssql_config, mssql_change_history_config, redis_config, rabbitmq_config };

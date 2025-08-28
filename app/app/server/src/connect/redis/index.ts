@@ -60,6 +60,8 @@ dotenv.config();
 class REDIS_Server {
     private static instance: REDIS_Server;
     private _redisClient!: RedisClientType;
+    private _isInitializing = false;
+    private _initPromise: Promise<void> | null = null;
 
     private constructor() {}
 
@@ -71,17 +73,45 @@ class REDIS_Server {
     }
 
     async init(): Promise<void> {
-        if (!this._redisClient) {
-            const redisConfig = `redis://${redis_config?.username}:${redis_config?.password}@${redis_config?.host}:${redis_config?.port}`;
-            this._redisClient = createClient({ url: redisConfig });
+        // if (!this._redisClient && !this._isInitializing) {
+        //     this._isInitializing = true;
+        //     const redisConfig = `redis://${redis_config?.username}:${redis_config?.password}@${redis_config?.host}:${redis_config?.port}`;
+        //     this._redisClient = createClient({ url: redisConfig });
 
-            this._redisClient.on('error', (err) => {
-                console.error('Redis Client Error', err);
-            });
+        //     this._redisClient.on('error', (err) => {
+        //         this._isInitializing = false;
+        //         console.error('Redis Client Error', err);
+        //     });
 
-            await this._redisClient.connect();
-            my_log.withGreen('REDIS_Server connected successfully!');
-        }
+        //     this._redisClient.connect()
+        //     .then(() => my_log.withGreen('REDIS_Server connected successfully!'))
+        //     .catch(err => {
+        //         this._isInitializing = false;
+        //         console.error(err);
+        //     })
+        // }
+        if (this._redisClient) return;
+        if (this._initPromise) return this._initPromise;
+
+        this._initPromise = (async () => {
+            try {
+                // const redisConfig = `redis://${redis_config?.username}:${redis_config?.password}@${redis_config?.host}:${redis_config?.port}`;
+                const redisConfig = `redis://${redis_config?.username}:${redis_config?.password}@${redis_config?.host}:${redis_config?.port}`;
+                this._redisClient = createClient({ url: redisConfig });
+
+                this._redisClient.on('error', (err) => {
+                    console.error('Redis Client Error', err);
+                });
+
+                await this._redisClient.connect();
+                my_log.withGreen('REDIS_Server connected successfully!');
+            } catch (err) {
+                console.error('Redis connection failed:', err);
+                throw err;
+            }
+        })();
+
+        return this._initPromise;
     }
 
     get_myConfig(): my_interface['redis']['config'] {

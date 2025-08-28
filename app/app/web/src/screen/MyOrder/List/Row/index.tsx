@@ -1,18 +1,20 @@
+import { FC } from 'react';
 import style from './style.module.scss';
+import { OrderField } from '@src/dataStruct/order';
 
 
-const Row = () => {
+const Row: FC<{data: OrderField, index: number}> = ({data, index}) => {
      return (
         <div className={style.parent}>
             <div><input type='checkbox' /></div>
             <div>
-                <div className={style.index}>10</div>
+                <div className={style.index}>{index}</div>
                 <div className={style.image}>
-                    <img src='https://r2.nucuoimekong.com/wp-content/uploads/buc-anh-dep-can-bang-sang-tot-1.jpg' alt='' />
+                    <img src={data.image} alt='' />
                 </div>
-                <div className={style.title}>ca hong my sieu giam gia trong ngay hom nay mua nha khong het hang ca hong my sieu giam gia trong ngay hom nay mua nha khong het hang ca hong my sieu giam gia trong ngay hom nay mua nha khong het hang ca hong my sieu giam gia trong ngay hom nay mua nha khong het hang</div>
-                <div className={style.amount}>so luong</div>
-                <div className={style.money}>tien</div>
+                <div className={style.title}>{data.title}</div>
+                <div className={style.amount}>{data.amount}</div>
+                <div className={style.money}>{data.price}</div>
             </div>
             <div>Đã mua</div>
         </div>

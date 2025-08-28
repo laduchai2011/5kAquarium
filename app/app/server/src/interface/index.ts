@@ -1,5 +1,6 @@
 import { config as mssql_config } from './mssql';
 import { config as redis_config } from './redis';
+import { config as rabbitmq_config } from './rabbitmq';
 import { infor as video_infor } from './video';
 
 interface mssql_interface {
@@ -8,6 +9,10 @@ interface mssql_interface {
 
 interface redis_interface {
     config?: redis_config;
+}
+
+interface rabbitmq_interface {
+    config?: rabbitmq_config;
 }
 
 interface router_res_type {
@@ -24,6 +29,7 @@ interface video_interface {
 interface my_interface {
     mssql: mssql_interface;
     redis: redis_interface;
+    rabbitmq: rabbitmq_interface;
     router_res_type: router_res_type;
     video: video_interface;
 }
