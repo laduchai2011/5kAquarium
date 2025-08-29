@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import './style.css';
 import {
     Editor,
@@ -11,6 +11,9 @@ import {
 import 'draft-js/dist/Draft.css';
 import blockRendererFn from './component/blockRendererFn';
 import { ListContext } from '@src/screen/List/context';
+import { FaFileImage } from "react-icons/fa";
+import { IMAGE_API } from '@src/const/api/image';
+import axios from 'axios';
 
 
 
@@ -28,6 +31,10 @@ const TextEditor: React.FC<{
 
     const editorStateInit = data.length > 0 ? EditorState.createWithContent(convertFromRaw(JSON.parse(data))) : EditorState.createEmpty();
     const [editorState, setEditorState] = useState(editorStateInit);
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+    // const [file, setFile] = useState<File | null>(null);
+    const [pendingFiles, setPendingFiles] = useState<{ localUrl: string, file: File }[]>([]);
+    const [preview, setPreview] = useState<string>("");
 
     const handleKeyCommand = (command: string): 'handled' | 'not-handled' => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
@@ -41,6 +48,12 @@ const TextEditor: React.FC<{
     const toggleBold = () => {
         setEditorState(RichUtils.toggleInlineStyle(editorState, 'BOLD'));
     };
+
+    useEffect(() => {
+        return () => {
+            URL.revokeObjectURL(preview);
+        }
+    }, [preview])
 
     const addImage = (url: string) => {
         const contentState = editorState.getCurrentContent();
@@ -57,11 +70,67 @@ const TextEditor: React.FC<{
         );
         setEditorState(newEditorState);
     };
+   
 
-    const saveContent = () => {
+    const handleIconClick = () => {
+        fileInputRef.current?.click();
+    };
+
+    // const handleUpload = async () => {
+    //     if (!file) return;
+
+    //     const formData = new FormData();
+    //     formData.append("image", file);
+
+    //     try {
+    //         const res = await axios.post(IMAGE_API.UPLOAD_AIMAGE, formData, {
+    //             headers: { "Content-Type": "multipart/form-data" },
+    //         });
+    //         // console.log("Uploaded:", res.data.file);
+    //         return res;
+    //     } catch (err) {
+    //         console.error(err);
+    //         setMessage({
+    //             message: 'Thay đổi ảnh đại diện thất bại !',
+    //             type: 'error'
+    //         })
+    //     }
+    // };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0]
+            // setFile(file_);
+            const localUrl = URL.createObjectURL(e.target.files[0])
+            setPreview(localUrl);
+            addImage(localUrl)
+            setPendingFiles(prev => [...prev, { localUrl, file }]);
+        }
+    };
+
+    const saveContent = async () => {
         const rawContent = convertToRaw(editorState.getCurrentContent());
+        let contentString = JSON.stringify(rawContent);
         if (onSave) {
-            onSave(JSON.stringify(rawContent));
+            for (const { localUrl, file } of pendingFiles) {
+                try {
+                    const formData = new FormData();
+                    formData.append("image", file);
+                    const res = await axios.post<{file: string}>(IMAGE_API.UPLOAD_AIMAGE, formData, {
+                        headers: { "Content-Type": "multipart/form-data" },
+                    });
+                    console.log(res)
+                    const uploadedUrl = IMAGE_API.GET_IMAGE + '/' + res.data.file;
+                    console.log(11111111111)
+                // Thay localUrl bằng uploadedUrl trong chuỗi JSON
+                    contentString = contentString.replaceAll(localUrl, uploadedUrl);
+                } catch (error) {
+                    console.error("Upload failed", error);
+                    setMessage({ message: 'Tải ảnh thất bại!', type: 'error' });
+                } 
+            }
+
+            onSave(contentString);
             setMessage({
                 message: 'Lưu chi tiết thành công !',
                 type: 'success'
@@ -74,9 +143,21 @@ const TextEditor: React.FC<{
             <div className='TextEditor-controler'>
                 <button onClick={saveContent}>Save</button>
                 <button onClick={toggleBold}>Bold</button>
-                <button onClick={() => addImage("https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/11/tai-hinh-nen-dep-mien-phi.jpg")}>
-                    Thêm ảnh
-                </button>
+                <div>
+                    <input
+                        type="file"
+                        accept="image/*"
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                    />
+                    <FaFileImage
+                        title='Chọn ảnh'
+                        size={30}
+                        style={{ cursor: "pointer" }}
+                        color='greenyellow'
+                        onClick={handleIconClick}
+                    />
+                </div>
             </div>
             <div style={{ border: '1px solid #ccc', minHeight: 100, padding: 10 }}>
                 <Editor

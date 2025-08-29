@@ -43,13 +43,13 @@ const Control = () => {
     }
 
     const list = data && data.map((items) => {
-        return <option key={items.id} value={items.id} selected={selectedFishCodeId === items.id}>{items.name}</option>
+        return <option key={items.id} value={items.id}>{items.name}</option>
     })
 
     return (
         <div className={style.parent}>
-            <select id="fishCode" name="fishCode" onChange={(e) => handleSelect(e)} required>
-                <option value="-1" selected={selectedFishCodeId === -1}>Tất cả</option>
+            <select id="fishCode" name="fishCode" defaultValue={selectedFishCodeId.toString()} onChange={(e) => handleSelect(e)} required>
+                <option value="-1">Tất cả</option>
                {list}
             </select>
         </div>
