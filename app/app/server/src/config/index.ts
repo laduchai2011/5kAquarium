@@ -3,6 +3,9 @@ import my_interface from '@src/interface';
 
 dotenv.config();
 
+// const isProduct = process.env.NODE_ENV === 'production';
+
+
 const mssql_config: my_interface['mssql']['config'] = {
     host: process.env.MSSQL_SERVER_HOST || '127.0.0.1',
     port: Number(process.env.MSSQL_SERVER_POST) || 1434,

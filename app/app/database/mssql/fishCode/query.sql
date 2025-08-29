@@ -52,11 +52,16 @@ ALTER FUNCTION GetFishCodeWithId (@id INT) RETURNS TABLE AS RETURN (
 );
 GO
 
-CREATE PROCEDURE GetAllFishCodesAccordingtoNameForFilter
+ALTER PROCEDURE GetAllFishCodesAccordingtoNameForFilter
 AS
 BEGIN
-    SELECT id, name
+    WITH FishCode AS (
+    SELECT id, name,
+           ROW_NUMBER() OVER (ORDER BY name ASC) AS rn
     FROM dbo.fishCode
-    ORDER BY name ASC;
+	)
+	SELECT id, name
+	FROM FishCode
+	ORDER BY name ASC;
 END
 GO

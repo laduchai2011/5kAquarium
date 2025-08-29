@@ -50,7 +50,7 @@ SELECT *
 FROM sys.objects 
 WHERE name = 'GetAccountWithId' AND type = 'IF';
 
-ALTER FUNCTION GetStatistic (@userId INT) RETURNS TABLE AS RETURN (
+CREATE FUNCTION GetStatistic (@userId INT) RETURNS TABLE AS RETURN (
     SELECT
         *
     FROM

@@ -1,4 +1,4 @@
-import express, { Express } from 'express';
+import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import path from 'path';
@@ -32,6 +32,9 @@ app.use(cookieParser());
 app.use(`/api`, express.json());
 app.use(`/api`, express.urlencoded({ extended: true }));
 
+app.use('/api/helo', (_: Request, res: Response) => {
+    res.send('5k xin chao')
+})
 
 app.use(`/api/service_account`, service_account);
 app.use(`/api/service_order`, service_order);
