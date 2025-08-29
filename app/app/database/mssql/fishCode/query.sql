@@ -4,13 +4,13 @@
 AS
 BEGIN
     -- Tập kết quả 1: dữ liệu phân trang
-    WITH Fish AS (
+    WITH FishCode AS (
         SELECT *,
                ROW_NUMBER() OVER (ORDER BY id DESC) AS rn
         FROM dbo.fishCode
     )
     SELECT *
-    FROM Fish
+    FROM FishCode
     WHERE rn BETWEEN ((@page - 1) * @size + 1) AND (@page * @size);
 
     -- Tập kết quả 2: tổng số dòng
@@ -18,19 +18,19 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE GetFishCodesAccordingtoName
+ALTER PROCEDURE GetFishCodesAccordingtoName
     @page INT,
     @size INT
 AS
 BEGIN
     -- Tập kết quả 1: dữ liệu phân trang
-    WITH Fish AS (
+    WITH FishCode AS (
         SELECT *,
-               ROW_NUMBER() OVER (ORDER BY name DESC) AS rn
+               ROW_NUMBER() OVER (ORDER BY name ASC) AS rn
         FROM dbo.fishCode
     )
     SELECT *
-    FROM Fish
+    FROM FishCode
     WHERE rn BETWEEN ((@page - 1) * @size + 1) AND (@page * @size);
 
     -- Tập kết quả 2: tổng số dòng
@@ -50,4 +50,13 @@ ALTER FUNCTION GetFishCodeWithId (@id INT) RETURNS TABLE AS RETURN (
     WHERE
         id = @id
 );
+GO
+
+CREATE PROCEDURE GetAllFishCodesAccordingtoNameForFilter
+AS
+BEGIN
+    SELECT id, name
+    FROM dbo.fishCode
+    ORDER BY name ASC;
+END
 GO

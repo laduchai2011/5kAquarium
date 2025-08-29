@@ -41,6 +41,16 @@
         > .price {
             min-width: 100px;
         }
+
+        > .icon {
+            min-width: 30px;
+
+            > svg {
+                &:hover {
+                    scale: 2;
+                }
+            }
+        }
     }
 
     > .textEditorDisplayContainer {

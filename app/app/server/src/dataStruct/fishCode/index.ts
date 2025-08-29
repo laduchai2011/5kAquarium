@@ -15,3 +15,8 @@ export interface PagedFishCodeField {
     items: FishCodeField[],
     totalCount: number
 }
+
+export interface FishCodeForFilterField {
+    id: number;
+    name: string
+}

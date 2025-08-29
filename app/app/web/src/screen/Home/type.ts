@@ -7,4 +7,6 @@ export interface ProductContextInterface {
     setPage: React.Dispatch<React.SetStateAction<string>>,
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
     setMessage: React.Dispatch<React.SetStateAction<MessageDataInterface>>
+    selectedFishCodeId: number,
+    setSelectedFishCodeId: React.Dispatch<React.SetStateAction<number>>
 }

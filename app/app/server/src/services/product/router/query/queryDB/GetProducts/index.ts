@@ -1,6 +1,6 @@
 import sql from 'mssql';
 import { QueryDB } from '@src/services/product/interface';
-import { ProductField } from '@src/dataStruct/product';
+import { ProductField, ProductFilterField } from '@src/dataStruct/product';
 
 
 interface TotalCountField {
@@ -18,6 +18,7 @@ class QueryDB_Get_Products extends QueryDB {
     private _connectionPool: sql.ConnectionPool | undefined;
     private _page: number = 1;
     private _size: number = 10;
+    private _productFilter: ProductFilterField | undefined;
 
     constructor() {
         super();
@@ -35,13 +36,18 @@ class QueryDB_Get_Products extends QueryDB {
         this._size = size;
     }
 
+    setProductFilter(productFilter: ProductFilterField): void {
+        this._productFilter = productFilter;
+    }
+
     async run(): Promise<ProductQueryResult | void> {
-        if (this._connectionPool !== undefined) {
+        if (this._connectionPool !== undefined && this._productFilter !== undefined) {
             try {
                 const result = await this._connectionPool
                     .request()
                     .input("page", sql.Int, this._page)
                     .input("size", sql.Int, this._size)
+                    .input("fishCodeId", sql.Int, this._productFilter.fishCodeId)
                     .execute('GetProducts')
                     
                 return result as unknown as ProductQueryResult;

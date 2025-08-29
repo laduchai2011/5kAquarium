@@ -18,8 +18,8 @@ export const productRTK = createApi({
                 return response.data;
             }
         }),
-        getProducts: builder.query<PagedProductField, { page: string; size: string }>({
-            query: ({ page, size }) => `${PRODUCT_API.GET_APRODUCTS}?page=${page}&size=${size}`,
+        getProducts: builder.query<PagedProductField, { page: string; size: string, fishCodeId: string }>({
+            query: ({ page, size, fishCodeId }) => `${PRODUCT_API.GET_APRODUCTS}?page=${page}&size=${size}&fishCodeId=${fishCodeId}`,
             transformResponse: (response: { isSuccess: boolean; data: PagedProductField }) => {
                 if (!response.data) throw new Error('No data');
                 return response.data;

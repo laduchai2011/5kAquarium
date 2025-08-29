@@ -11,18 +11,20 @@ class Handle_Get_Products {
 
     constructor() {}
 
-    main = async (req: Request<unknown, unknown, unknown, {page: string, size: string}>, res: Response) => {
+    main = async (req: Request<unknown, unknown, unknown, {page: string, size: string, fishCodeId: string}>, res: Response) => {
         const myResponse: MyResponse<PagedProductField> = {
             isSuccess: false
         };
 
         const page = parseInt(req.query.page, 10) || 1;
         const size = parseInt(req.query.size, 10) || 10;
+        const fishCodeId = parseInt(req.query.fishCodeId, 10) || -1;
 
         const queryDB_get_products = new QueryDB_Get_Products();
 
         queryDB_get_products.setSize(size);
         queryDB_get_products.setPage(page);
+        queryDB_get_products.setProductFilter({fishCodeId: fishCodeId})
         const conn = this._mssql_server.get_connectionPool();
 
         if (conn) {

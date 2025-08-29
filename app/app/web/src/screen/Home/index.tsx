@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from "react-router-dom";
 import style from './style.module.scss';
 import HeaderLeft from '@src/component/Header/HeaderLeft';
 import HeaderTop from '@src/component/Header/HeaderTop';
+import Control from './component/Control';
 import Fish from './component/Fish';
 import { HOME } from '@src/const/text';
 import { useNavigate } from 'react-router-dom';
@@ -18,6 +20,8 @@ import { ProductContextInterface } from './type';
 
 const Home = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const fishCodeId = location?.state?.fishCodeId;
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const myId = sessionStorage.getItem("myId");
     const [data, setData] = useState<ProductField[]>([]);
@@ -27,6 +31,16 @@ const Home = () => {
         message: '',
         type: 'normal'
     })
+    const [selectedFishCodeId, setSelectedFishCodeId] = useState<number>(-2);
+    useEffect(() => {
+        if (selectedFishCodeId === -2) {
+            if (fishCodeId) {
+                setSelectedFishCodeId(fishCodeId)
+            } else {
+                setSelectedFishCodeId(-1)
+            }
+        }
+    }, [selectedFishCodeId, fishCodeId])
 
     const {
         data: data_, 
@@ -34,18 +48,15 @@ const Home = () => {
         isLoading: isLoading_,
         isError, 
         error
-    } = useGetProductsQuery({page: page, size: size});
-    
+    } = useGetProductsQuery({page: page, size: size, fishCodeId: selectedFishCodeId.toString() || '-1'});
     useEffect(() => {
         if (isError && error) {
             console.error(error);
         }
     }, [isError, error])
-
     useEffect(() => {
         setIsLoading(isLoading_);
     }, [isLoading_])
-
     useEffect(() => {
         if (data_?.items) {
             setData(data_.items)
@@ -69,7 +80,9 @@ const Home = () => {
         page: page,
         setPage: setPage,
         setIsLoading,
-        setMessage
+        setMessage,
+        selectedFishCodeId,
+        setSelectedFishCodeId
     }
 
     return (
@@ -88,6 +101,7 @@ const Home = () => {
                                 <div onClick={() => goToSignin()}>Đăng nhập</div>
                             </div>
                         </div>}
+                        <div><Control /></div>
                         <div><Fish /></div>
                     </div>
                 </div>

@@ -20,3 +20,7 @@ export interface PagedProductField {
     items: ProductField[],
     totalCount: number
 }
+
+// export interface ProductFilterField {
+//     fishCodeId: number;
+// }

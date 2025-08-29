@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { FISHCODE_API } from '@src/const/api/fishCode';
 import type { MyResponse } from '@src/dataStruct/response';
-import type { FishCodeField, PagedFishCodeField } from '@src/dataStruct/fishCode';
+import type { FishCodeField, PagedFishCodeField, FishCodeForFilterField } from '@src/dataStruct/fishCode';
 
 export const fishCodeRTK = createApi({
     reducerPath: 'fishCodeRTK',
@@ -24,14 +24,19 @@ export const fishCodeRTK = createApi({
                 if (!response.data) throw new Error('No data');
                 return response.data;
             },
-            
+        }),
+        getAllFishCodesForFilter: builder.query<FishCodeForFilterField[], void>({
+            query: () => FISHCODE_API.GET_ALLFISHCODES_FOR_FILTER,
+            transformResponse: (response: { isSuccess: boolean; data: FishCodeForFilterField[] }) => {
+                if (!response.data) throw new Error('No data');
+                return response.data;
+            },
         }),
     }),
 });
 
 export const { 
     useGetAFishCodeWithIdQuery,
-    useGetFishCodesAccordingtoNameQuery
-    // useGetFishCodesQuery,
-    // useAddFishCodeMutation
+    useGetFishCodesAccordingtoNameQuery,
+    useGetAllFishCodesForFilterQuery
 } = fishCodeRTK;
