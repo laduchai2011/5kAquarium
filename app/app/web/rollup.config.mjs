@@ -45,7 +45,8 @@ const HOST = getLocalIp();
 
 
 const entries = [
-    { find: '@src', replacement: 'src' }
+    { find: '@src', replacement: 'src' },
+    { find: 'stream', replacement: 'stream-browserify' }
 ];
 const customResolver = resolve({
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.css', '.pcss', '.scss', '.png'],
@@ -116,8 +117,8 @@ const rollup_dev = isDev && [
             json(),
             replace({
                 preventAssignment: true, // Cần thiết cho Rollup 3+
-                'process.env.NODE_ENV': JSON.stringify('development'),
-                'process.env.API_URL': JSON.stringify(process.env.API_URL)
+                'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
+                'process.env.API_URL': JSON.stringify(process.env.API_URL || '')
             }),
             // html({
             //     fileName: 'index.html',
@@ -158,9 +159,13 @@ const rollup_prod = isProd && [
             },
         ],
         plugins: [
+            resolve({
+                browser: true, // Quan trọng: để build cho browser
+                preferBuiltins: false
+            }),
             peerDepsExternal(),
             external(),
-            resolve(),
+            // resolve(),
             commonjs(),
             postcss({
                 plugins: [postcssPresetEnv(), autoprefixer()],
@@ -190,8 +195,10 @@ const rollup_prod = isProd && [
             }),
             json(),
             replace({
-                'process.env.NODE_ENV': JSON.stringify('production'),
                 preventAssignment: true, // Cần thiết cho Rollup 3+
+                'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
+                'process.env.API_URL': JSON.stringify(process.env.API_URL || '')
+                
             }),
             // html({
             //     fileName: 'index.html',
